@@ -21,6 +21,11 @@ public class HomeController {
 		return a;
 	}
 
+	@RequestMapping("/hello")
+	public String main() {
+		return "hello";
+	}
+
 	@RequestMapping("/test")
 	public ResponseEntity<?> test() {
 		List<User> userList = userService.getUser();
