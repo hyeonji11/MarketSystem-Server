@@ -16,6 +16,9 @@ target/
 ### DB info ###
 jdbc.properties
 
+### mail info ###
+application-mail.properties
+
 ### IntelliJ IDEA ###
 .idea
 *.iws

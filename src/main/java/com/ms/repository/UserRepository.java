@@ -8,4 +8,6 @@ import com.ms.domain.User;
 
 public interface UserRepository extends JpaRepository<User, Integer>{
 	Optional<User> findById(String id);
+	User findByEmailAndName(String email, String name);
+	User findByIdAndEmail(String id, String email);
 }
