@@ -13,11 +13,9 @@ target/
 .springBeans
 .sts4-cache
 
-### DB info ###
-jdbc.properties
 
-### mail info ###
-application-mail.properties
+### project info ###
+application.properties
 
 ### IntelliJ IDEA ###
 .idea

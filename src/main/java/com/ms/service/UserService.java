@@ -6,7 +6,6 @@ import java.util.Random;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.PropertySource;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,7 +16,6 @@ import com.ms.domain.User;
 import com.ms.repository.UserRepository;
 
 @Service
-@PropertySource("classpath:mail.properties")
 public class UserService {
 
 	@Autowired
