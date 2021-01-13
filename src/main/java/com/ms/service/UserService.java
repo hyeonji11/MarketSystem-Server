@@ -15,11 +15,17 @@ import org.springframework.stereotype.Service;
 import com.ms.domain.User;
 import com.ms.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
-
+	/*
 	@Autowired
 	UserRepository userRepository;
+	*/
+
+	private final UserRepository userRepository;
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -33,9 +39,9 @@ public class UserService {
 	}
 
 	@Transactional
-	public void signUpUser(User user) {
+	public User signUpUser(User user) {
 		user.setPw(passwordEncoder.encode(user.getPw()));
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	public void updateUser(User user) {
