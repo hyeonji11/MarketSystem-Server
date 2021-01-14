@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.User;
@@ -20,15 +19,13 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-	/*
-	@Autowired
-	UserRepository userRepository;
-	*/
 
 	private final UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+//	@Autowired
+//	PasswordEncoder passwordEncoder;
+
+	public BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 	@Autowired
 	public JavaMailSender emailSender;
