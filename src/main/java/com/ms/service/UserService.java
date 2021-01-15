@@ -25,18 +25,20 @@ public class UserService {
 //	@Autowired
 //	PasswordEncoder passwordEncoder;
 
-	public BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public JavaMailSender emailSender;
 
-	public List getUser() {
-		List<User> userList = userRepository.findAll();
-		return userList;
+//	private JavaMailSender emailSender;
+
+	public List<User> getUser() {
+		return userRepository.findAll();
 	}
 
 	@Transactional
 	public User signUpUser(User user) {
+		passwordEncoder = new BCryptPasswordEncoder();
 		user.setPw(passwordEncoder.encode(user.getPw()));
 		return userRepository.save(user);
 	}
@@ -75,8 +77,8 @@ public class UserService {
 			}
 
 			sendMail(email, str.toString());
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			user.setPw(encoder.encode(str.toString()));
+			passwordEncoder = new BCryptPasswordEncoder();
+			user.setPw(passwordEncoder.encode(str.toString()));
 			updateUser(user);
 			return true;
 		}
