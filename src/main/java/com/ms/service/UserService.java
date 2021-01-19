@@ -30,8 +30,6 @@ public class UserService {
 	@Autowired
 	public JavaMailSender emailSender;
 
-//	private JavaMailSender emailSender;
-
 	public List<User> getUser() {
 		return userRepository.findAll();
 	}
