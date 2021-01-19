@@ -25,14 +25,14 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	private JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
 
 	@Autowired
-	private UserDetailsService jwtUserDetailsService;
+	private UserDetailsService userDetailsService;
 
 	@Autowired
 	private JwtRequestFilter jwtRequestFilter;
 
 	@Autowired
 	public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-		auth.userDetailsService(jwtUserDetailsService).passwordEncoder(passwordEncoder());
+		auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder());
 	}
 
 	@Bean
@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf().disable()
 				.cors().disable()
 				.formLogin().disable()
-				.authorizeRequests().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw", "/**").permitAll().
+				.authorizeRequests().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw", "/**","/hello").permitAll().
 				anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)

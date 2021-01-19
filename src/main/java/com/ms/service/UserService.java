@@ -9,33 +9,36 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.User;
 import com.ms.repository.UserRepository;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 @Service
 public class UserService {
 
-	@Autowired
-	UserRepository userRepository;
+	private final UserRepository userRepository;
 
-	@Autowired
-	PasswordEncoder passwordEncoder;
+//	@Autowired
+//	PasswordEncoder passwordEncoder;
+
+	private BCryptPasswordEncoder passwordEncoder;
 
 	@Autowired
 	public JavaMailSender emailSender;
 
-	public List getUser() {
-		List<User> userList = userRepository.findAll();
-		return userList;
+	public List<User> getUser() {
+		return userRepository.findAll();
 	}
 
 	@Transactional
-	public void signUpUser(User user) {
+	public User signUpUser(User user) {
+		passwordEncoder = new BCryptPasswordEncoder();
 		user.setPw(passwordEncoder.encode(user.getPw()));
-		userRepository.save(user);
+		return userRepository.save(user);
 	}
 
 	public void updateUser(User user) {
@@ -72,8 +75,8 @@ public class UserService {
 			}
 
 			sendMail(email, str.toString());
-			BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
-			user.setPw(encoder.encode(str.toString()));
+			passwordEncoder = new BCryptPasswordEncoder();
+			user.setPw(passwordEncoder.encode(str.toString()));
 			updateUser(user);
 			return true;
 		}
