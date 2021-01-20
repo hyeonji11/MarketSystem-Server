@@ -53,7 +53,7 @@ public class UserService {
 	public boolean findPw(String id, String email) {
 		User user = userRepository.findByIdAndEmail(id, email);
 
-		if(user.getId() != null) {
+		if(user != null) {
 			StringBuffer str = new StringBuffer();
 			Random rnd = new Random();
 			for (int i = 0; i < 10; i++) {

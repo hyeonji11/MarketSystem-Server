@@ -16,6 +16,7 @@ target/
 
 ### project info ###
 application.properties
+application-mail.properties
 
 ### IntelliJ IDEA ###
 .idea
