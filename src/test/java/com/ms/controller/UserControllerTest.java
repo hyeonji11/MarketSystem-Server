@@ -60,13 +60,13 @@ public class UserControllerTest {
 	}
 
 	@Test
-	public void save_userDto_returnSuccess() throws Exception {
+	public void signUp_userDto_returnSuccess() throws Exception {
 		//given
 
 
 		//when
 		mockMvc.perform(post("/user/signup")
-				.contentType(MediaType.APPLICATION_JSON_UTF8)
+				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(userDto)))
 				.andExpect(status().isOk());
 

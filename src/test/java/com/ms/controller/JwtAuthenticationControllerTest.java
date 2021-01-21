@@ -1,10 +1,10 @@
 package com.ms.controller;
 
+import static org.hamcrest.CoreMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -17,9 +17,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ms.domain.User;
 import com.ms.dto.JwtRequest;
-import com.ms.repository.UserRepository;
+import com.ms.dto.UserDto;
+import com.ms.service.JwtUserDetailsService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,7 +29,7 @@ public class JwtAuthenticationControllerTest {
 	private MockMvc mvc;
 
 	@Autowired
-	private UserRepository userRepository;
+	private JwtUserDetailsService userService;
 
 	@Autowired
 	private JwtAuthenticationController jwtAuthenticationController;
@@ -39,21 +39,18 @@ public class JwtAuthenticationControllerTest {
 		mvc = MockMvcBuilders.standaloneSetup(jwtAuthenticationController).build();
 	}
 
-	@After
-	public void tearDown() {
-		userRepository.deleteAll();
-	}
 
 	@Test
 	public void login_idAndPw_returnToken() throws Exception {
 		//given
-		userRepository.save(User.builder()
-				.id("id11")
-				.pw("pw11")
-				.email("test111@naver.com")
-				.name("사용자11")
-				.phone("010-3311-3311")
-				.build());
+		UserDto userDto = new UserDto();
+		userDto.setId("id11");
+		userDto.setPw("pw11");
+		userDto.setName("사용자11");
+		userDto.setEmail("test111@naver.com");
+		userDto.setPhone("010-3311-3311");
+
+		userService.save(userDto);
 
 		JwtRequest req = new JwtRequest("id11", "pw11");
 
@@ -62,7 +59,7 @@ public class JwtAuthenticationControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(new ObjectMapper().writeValueAsString(req)))
 			.andExpect(status().isOk())
-			.andExpect(content().string("아이디 혹은 이메일이 옳지 않습니다."));
+			.andExpect(content().string(any(String.class)));
 	}
 
 }
