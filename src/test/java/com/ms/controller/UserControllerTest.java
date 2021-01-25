@@ -4,6 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.List;
@@ -155,6 +156,20 @@ public class UserControllerTest {
 				.content(new ObjectMapper().writeValueAsString(user)))
 				.andExpect(status().isOk())
 				.andExpect(content().string("아이디 혹은 이메일이 옳지 않습니다."));
+	}
+
+	@Test
+	public void getUser_whenRequest_returnUser() throws Exception {
+		//given
+		userController.signUp(userDto);
+
+		//when&then
+		mockMvc.perform(get("/user/update")
+				.param("id", userDto.getId()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id").value(userDto.getId()))
+				.andExpect(jsonPath("$.pw").value(""))
+				.andExpect(jsonPath("$.email").value(userDto.getEmail()));
 	}
 
 }

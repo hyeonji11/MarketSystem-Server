@@ -6,6 +6,7 @@ import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -16,6 +17,7 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.ms.domain.User;
+import com.ms.dto.UserDto;
 import com.ms.repository.UserRepository;
 
 
@@ -60,18 +62,19 @@ public class UserServiceTest {
 		assertThat(users).isEqualTo(list);
 	}
 
-	@Test
-	public void updateUser_userInfo_save() {
-		//given
-		Mockito.when(userRepository.save(testUser))
-				.thenReturn(testUser);
-
-		//when
-		userService.updateUser(testUser);
-
-		//then
-		verify(userRepository).save(testUser);
-	}
+//	@Test
+//	public void updateUser_userInfo_save() {
+//		//given
+//		Mockito.when(userRepository.save(testUser))
+//				.thenReturn(testUser);
+//
+//		//when
+//		User user = userService.updateUser(testUser);
+//
+//		//then
+//		verify(userRepository).save(testUser);
+//		assertThat(passwordEncoder.matches("pw1", user.getPw())).isTrue();
+//	}
 
 	@Test
 	public void findId_EmailAndName_True() {
@@ -100,6 +103,22 @@ public class UserServiceTest {
 		//then
 		verify(userRepository, times(1)).save(testUser);
 		assertThat(passwordEncoder.matches("pw1", user.getPw())).isTrue();
+	}
+
+	@Test
+	public void getUserOne_userId_returnOneUser() {
+		//given
+		Optional<User> user = Optional.of(testUser);
+
+		Mockito.when(userRepository.findById("id1"))
+				.thenReturn(user);
+
+		//when
+		UserDto one = userService.getUserOne("id1");
+
+		//then
+		assertThat(one.getId()).isEqualTo(testUser.getId());
+		assertThat(one.getEmail()).isEqualTo(testUser.getEmail());
 	}
 
 }

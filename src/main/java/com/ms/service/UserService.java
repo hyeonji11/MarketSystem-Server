@@ -1,6 +1,7 @@
 package com.ms.service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Random;
 
 import javax.transaction.Transactional;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.User;
+import com.ms.dto.UserDto;
 import com.ms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -34,6 +36,19 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
+	public UserDto getUserOne(String id) {
+		Optional<User> one = userRepository.findById(id);
+		User user = one.get();
+		UserDto userDto = UserDto.builder()
+								.id(user.getId())
+								.pw("")
+								.email(user.getEmail())
+								.name(user.getName())
+								.phone(user.getPhone())
+								.build();
+		return userDto;
+	}
+
 	@Transactional
 	public User signUpUser(User user) {
 		passwordEncoder = new BCryptPasswordEncoder();
@@ -41,6 +56,7 @@ public class UserService {
 		return userRepository.save(user);
 	}
 
+	//signUpUser와 내용 합치기
 	public void updateUser(User user) {
 		userRepository.save(user);
 	}

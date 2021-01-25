@@ -4,9 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.dto.UserDto;
@@ -49,5 +51,11 @@ public class UserController {
 			return new ResponseEntity("메일 전송 완료", resHeaders, HttpStatus.OK);
 		}
 		return new ResponseEntity("아이디 혹은 이메일이 옳지 않습니다.", resHeaders, HttpStatus.OK);
+	}
+
+	@GetMapping("/update")
+	public ResponseEntity<?> getUser(@RequestParam String id) {
+		UserDto user = userService.getUserOne(id);
+		return new ResponseEntity(user, HttpStatus.OK);
 	}
 }
