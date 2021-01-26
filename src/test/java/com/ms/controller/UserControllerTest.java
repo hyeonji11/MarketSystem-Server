@@ -3,6 +3,7 @@ package com.ms.controller;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -17,9 +18,11 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -170,6 +173,34 @@ public class UserControllerTest {
 				.andExpect(jsonPath("$.id").value(userDto.getId()))
 				.andExpect(jsonPath("$.pw").value(""))
 				.andExpect(jsonPath("$.email").value(userDto.getEmail()));
+	}
+
+	@Test
+	public void updateUser_whenRequest_userUpdate() throws Exception {
+		//given
+		String name = "사용자ㅏ아아아아아아";
+		String pw = "password432408204";
+
+		userController.signUp(userDto);
+
+		userDto.setName(name);
+		userDto.setPw(pw);
+
+		//when&then
+		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+
+		MvcResult result = mockMvc.perform(put("/user/update")
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(new ObjectMapper().writeValueAsString(userDto)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.name").value(userDto.getName()))
+				.andReturn();
+
+		String str = result.getResponse().getContentAsString();
+		ObjectMapper mapper = new ObjectMapper();
+		User user = mapper.readValue(str, User.class);
+
+		assertThat(passwordEncoder.matches(pw, user.getPw())).isTrue();
 	}
 
 }

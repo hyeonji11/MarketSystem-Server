@@ -114,11 +114,23 @@ public class UserServiceTest {
 				.thenReturn(user);
 
 		//when
-		UserDto one = userService.getUserOne("id1");
+		User one = userService.getUserOne("id1");
 
 		//then
 		assertThat(one.getId()).isEqualTo(testUser.getId());
 		assertThat(one.getEmail()).isEqualTo(testUser.getEmail());
+	}
+
+	@Test
+	public void userToDto_whenUser_returnDto() {
+		//given
+
+		//when
+		UserDto dto = userService.userToDto(testUser);
+
+		//then
+		assertThat(dto.getId()).isEqualTo(testUser.getId());
+		assertThat(dto.getEmail()).isEqualTo(testUser.getEmail());
 	}
 
 }

@@ -6,11 +6,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.domain.User;
 import com.ms.dto.UserDto;
 import com.ms.service.JwtUserDetailsService;
 import com.ms.service.UserService;
@@ -55,7 +57,23 @@ public class UserController {
 
 	@GetMapping("/update")
 	public ResponseEntity<?> getUser(@RequestParam String id) {
-		UserDto user = userService.getUserOne(id);
-		return new ResponseEntity(user, HttpStatus.OK);
+		User user = userService.getUserOne(id);
+		UserDto result = userService.userToDto(user);
+		result.setPw("");
+		return new ResponseEntity(result, HttpStatus.OK);
+	}
+
+	@PutMapping("/update")
+	public ResponseEntity<?> updateUser(@RequestBody UserDto user) {
+		User req = userService.getUserOne(user.getId());
+		req.setName(user.getName());
+		req.setPw(user.getPw());
+		req.setEmail(user.getEmail());
+		req.setPhone(user.getPhone());
+
+		User result = userService.signUpUser(req);
+		//String userId = userDetailsService.save(user);
+		UserDto dto = userService.userToDto(result);
+		return new ResponseEntity(dto, HttpStatus.OK);
 	}
 }

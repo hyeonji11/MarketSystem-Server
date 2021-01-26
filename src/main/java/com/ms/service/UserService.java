@@ -36,16 +36,20 @@ public class UserService {
 		return userRepository.findAll();
 	}
 
-	public UserDto getUserOne(String id) {
+	public User getUserOne(String id) {
 		Optional<User> one = userRepository.findById(id);
 		User user = one.get();
+		return user;
+	}
+
+	public UserDto userToDto(User user) {
 		UserDto userDto = UserDto.builder()
-								.id(user.getId())
-								.pw("")
-								.email(user.getEmail())
-								.name(user.getName())
-								.phone(user.getPhone())
-								.build();
+				.id(user.getId())
+				.pw(user.getPw())
+				.email(user.getEmail())
+				.name(user.getName())
+				.phone(user.getPhone())
+				.build();
 		return userDto;
 	}
 
