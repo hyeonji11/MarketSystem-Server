@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.ms.domain.User;
 import com.ms.dto.UserDto;
+import com.ms.dto.UserResponse;
 import com.ms.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
@@ -51,6 +52,17 @@ public class UserService {
 				.phone(user.getPhone())
 				.build();
 		return userDto;
+	}
+
+	public UserResponse userToResponse(User user) {
+		UserResponse userResponse = UserResponse.builder()
+										.userIdx(user.getUserIdx())
+										.id(user.getId())
+										.name(user.getName())
+										.email(user.getEmail())
+										.phone(user.getPhone())
+										.build();
+		return userResponse;
 	}
 
 	@Transactional
