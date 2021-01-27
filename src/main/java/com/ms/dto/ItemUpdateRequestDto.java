@@ -19,21 +19,4 @@ public class ItemUpdateRequestDto {
 		this.charge = charge;
 		this.type = type;
 	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public String getCharge() {
-		return charge;
-	}
-
-	public boolean isType() {
-		return type;
-	}
-	
 }

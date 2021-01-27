@@ -2,6 +2,7 @@ package com.ms.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,54 +13,56 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.Item;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.service.ItemService;
+import com.ms.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
+@RequestMapping("/item")
 @Slf4j // 이걸 해야 log.info(..) 가 가능, 디버깅 용도
 public class ItemController {
-	@Autowired
-	ItemService itemService;
+	
+	@Autowired	ItemService itemService;
+	@Autowired	UserService userService;
 
 	// read list
-	@GetMapping("/item/list")
-	public String findAll(Model model) {
-		List<Item> itemList = itemService.findAll();
-
-		model.addAttribute("list", itemList);
-
-		return "item/list";
+	@GetMapping("/list")
+	public List<Item> item() {		 
+		return itemService.findAll();
 	}
 
 	// read one
-	@GetMapping("/itme/{itemIdx}")
-	public String findById(Model model, @PathVariable Integer itemIdx) {
-		Optional<Item> item = itemService.findById(itemIdx);
-		model.addAttribute("item", item);
-
-		return "item/one";
+	@GetMapping("/{itemIdx}")
+	public Item item(@PathVariable("itemIdx") int itemIdx) {
+		return itemService.findById(itemIdx).get();
 	}
 
 	// create
-	@PostMapping("/item")
-	public Integer save(@RequestBody ItemSaveRequestDto itemSaveRequestDto) {
-		return itemService.saveItem(itemSaveRequestDto);
+	@PostMapping("/save")
+	public String save(@RequestBody ItemSaveRequestDto itemSaveRequestDto) {
+		itemService.saveItem(itemSaveRequestDto);
+		return "success";
 	}
 
 	// update
-	@PutMapping("/item/{itemIdx}")
-	public Integer update(@PathVariable int itemIdx, @RequestBody ItemUpdateRequestDto itemUpdateRequestDto) {
-		return itemService.update(itemIdx, itemUpdateRequestDto);
+	@PutMapping("/{itemIdx}")
+	public String update(@PathVariable int itemIdx, @RequestBody ItemUpdateRequestDto itemUpdateRequestDto) {
+		itemService.update(itemIdx, itemUpdateRequestDto);
+		return "success";
 	}
+	
 
 	// delete
-	@DeleteMapping("/item/{itemIdx}")
-	public Integer delete(@PathVariable int itemIdx) {
-		return itemService.delete(itemIdx);
+	@DeleteMapping("/{itemIdx}")
+	public String delete(@PathVariable int itemIdx) {
+		itemService.delete(itemIdx);
+		return "success";
 	}
 }

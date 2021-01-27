@@ -7,9 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.Item;
+import com.ms.domain.User;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.repository.ItemRepository;
+import com.ms.repository.UserRepository;
 
 @Service
 
@@ -17,11 +19,22 @@ public class ItemService {
 
 	@Autowired
 	ItemRepository itemRepository;
+	@Autowired
+	UserRepository userRepository;
 
 	public Integer saveItem(ItemSaveRequestDto itemSaveRequestDto) {
-		Item item = new Item(itemSaveRequestDto.getItemIdx(), itemSaveRequestDto.getUserIdx(), itemSaveRequestDto.getTitle(), itemSaveRequestDto.getContent(), itemSaveRequestDto.getReturnDate(), itemSaveRequestDto.getCharge(),itemSaveRequestDto.isType());
+		Optional<User> one = userRepository.findById(itemSaveRequestDto.getUserId());
+	      User user = one.get();
+		Item item = Item.builder()
+				.title(itemSaveRequestDto.getTitle())
+				.user(user)
+				.content(itemSaveRequestDto.getContent())
+				.returnDate(itemSaveRequestDto.getReturnDate())
+				.charge(itemSaveRequestDto.getCharge())
+				.type(itemSaveRequestDto.isType())
+				.build();
+				
 		itemRepository.save(item);
-
 		return itemSaveRequestDto.getItemIdx();
 	}
 

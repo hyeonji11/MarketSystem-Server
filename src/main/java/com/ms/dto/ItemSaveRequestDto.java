@@ -2,6 +2,8 @@ package com.ms.dto;
 
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,49 +13,26 @@ import lombok.NoArgsConstructor;
 public class ItemSaveRequestDto {
 	int itemIdx;
 	String title;
-	int userIdx;
+	String userId;
 	String content;
 	Date returnDate;
 	String charge;
 	boolean type;
-	
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	public void setreturnDate(Date returnDate) {
+		this.returnDate = returnDate;
+	}
+
 	@Builder
-	public ItemSaveRequestDto(int itemIdx, String title, int userIdx, String content, Date returnDate, String charge, boolean type) {
+	public ItemSaveRequestDto(int itemIdx, String title, String userId, String content, Date returnDate, String charge,
+			boolean type) {
 		this.itemIdx = itemIdx;
 		this.title = title;
-		this.userIdx =userIdx;
+		this.userId = userId;
 		this.content = content;
 		this.returnDate = returnDate;
 		this.charge = charge;
-		this.type =type;
+		this.type = type;
 	}
-
-	public int getItemIdx() {
-		return itemIdx;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public int getUserIdx() {
-		return userIdx;
-	}
-
-	public String getContent() {
-		return content;
-	}
-
-	public Date getReturnDate() {
-		return returnDate;
-	}
-
-	public String getCharge() {
-		return charge;
-	}
-
-	public boolean isType() {
-		return type;
-	}
-	
 }
