@@ -1,13 +1,9 @@
 package com.ms.controller;
 
-import java.util.List;
-import java.util.Optional;
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,9 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.ms.domain.Item;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
+import com.ms.interfaces.ProjectItem;
 import com.ms.service.ItemService;
 import com.ms.service.UserService;
-import com.ms.interfaces.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -30,22 +26,23 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/item")
 @Slf4j // 이걸 해야 log.info(..) 가 가능, 디버깅 용도
 public class ItemController {
-	
-	@Autowired	ItemService itemService;
-	@Autowired	UserService userService;
+
+	@Autowired
+	ItemService itemService;
+	@Autowired
+	UserService userService;
 
 	// read list
 	@GetMapping("/list")
 	public List<ProjectItem> item() {
 		List<Item> items = itemService.findAll();
-		
-		List<ProjectItem> newItems = new ArrayList<ProjectItem>();	
-		
-		for(Item item : items) {
+
+		List<ProjectItem> newItems = new ArrayList<ProjectItem>();
+
+		for (Item item : items) {
 			newItems.add(new ProjectItem(item));
 		}
-		
-		
+
 		return newItems;
 	}
 
@@ -53,7 +50,7 @@ public class ItemController {
 	@GetMapping("/{itemIdx}")
 	public ProjectItem item(@PathVariable("itemIdx") int itemIdx) {
 		Item item = itemService.findById(itemIdx).get();
-		
+
 		return new ProjectItem(item);
 	}
 
@@ -70,7 +67,6 @@ public class ItemController {
 		itemService.update(itemIdx, itemUpdateRequestDto);
 		return "success";
 	}
-	
 
 	// delete
 	@DeleteMapping("/{itemIdx}")
