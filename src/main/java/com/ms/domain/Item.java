@@ -1,5 +1,6 @@
 package com.ms.domain;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import javax.persistence.Entity;
@@ -35,14 +36,14 @@ public class Item {
 	String title;
 	String content;
 
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	Date returnDate;
+	//	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	LocalDate returnDate;
 
 	String charge;
 	boolean type;
 
 	@Builder
-	public Item(User user, String title, String content, Date returnDate, String charge, boolean type) {
+	public Item(User user, String title, String content, LocalDate returnDate, String charge, boolean type) {
 		this.user = user;
 		this.title = title;
 		this.content = content;

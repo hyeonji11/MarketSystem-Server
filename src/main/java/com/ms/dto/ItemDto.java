@@ -1,4 +1,5 @@
 package com.ms.dto;
+import java.time.LocalDate;
 import java.util.Date;
 
 import lombok.AllArgsConstructor;
@@ -14,12 +15,12 @@ public class ItemDto {
 	int userIdx;
 	String title;
 	String content;
-	Date returnDate;
+	LocalDate returnDate;
 	int charge;
 	boolean type;
 	
-    @DateTimeFormat(pattern="yyyy-MM-dd")
-    public void setreturnDate(Date returnDate) {
+    // @DateTimeFormat(pattern="yyyy-MM-dd")
+    public void setreturnDate(LocalDate returnDate) {
         this.returnDate = returnDate;
     }
 
