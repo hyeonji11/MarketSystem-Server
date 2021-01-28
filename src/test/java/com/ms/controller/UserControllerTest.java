@@ -202,4 +202,28 @@ public class UserControllerTest {
 		//assertThat(passwordEncoder.matches(pw, user.getPw())).isTrue();
 	}
 
+	@Test
+	public void checkId_duplicatedId_returnMessage() throws Exception {
+		//given
+		userController.signUp(userDto);
+
+		//when&then
+		mockMvc.perform(get("/user/check")
+				.param("id", userDto.getId()))
+				.andExpect(status().isOk())
+				.andExpect(content().string("중복된 아이디입니다."));
+	}
+
+	@Test
+	public void checkId_originalId_returnMessage() throws Exception {
+		//given
+		userController.signUp(userDto);
+
+		//when&then
+		mockMvc.perform(get("/user/check")
+				.param("id", "ididid222"))
+				.andExpect(status().isOk())
+				.andExpect(content().string("사용 가능합니다."));
+	}
+
 }

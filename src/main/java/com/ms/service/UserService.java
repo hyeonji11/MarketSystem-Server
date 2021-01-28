@@ -39,7 +39,10 @@ public class UserService {
 
 	public User getUserOne(String id) {
 		Optional<User> one = userRepository.findById(id);
-		User user = one.get();
+		User user;
+		if(one.isPresent()) {
+			user = one.get();
+		} else user = null;
 		return user;
 	}
 

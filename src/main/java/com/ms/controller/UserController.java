@@ -79,4 +79,16 @@ public class UserController {
 		//UserDto dto = userService.userToDto(result);
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
+
+	@GetMapping("/check")
+	public ResponseEntity<?> checkId(@RequestParam String id) {
+		User user = userService.getUserOne(id);
+
+		HttpHeaders resHeaders = new HttpHeaders();
+		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
+
+		if(user != null)
+			return new ResponseEntity("중복된 아이디입니다.", resHeaders, HttpStatus.OK);
+		return new ResponseEntity("사용 가능합니다.", resHeaders, HttpStatus.OK);
+	}
 }
