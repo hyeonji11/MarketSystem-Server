@@ -5,6 +5,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,6 +20,7 @@ public class ItemSaveRequestDto {
 	String charge;
 	boolean type;
 	// Date returnDate;
+	//@DateTimeFormat(pattern="yyyy-MM-dd")
 	LocalDate returnDate;
 	
 	/* public void setreturnDate(Date returnDate) {

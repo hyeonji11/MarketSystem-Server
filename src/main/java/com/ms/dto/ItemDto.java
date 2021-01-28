@@ -18,10 +18,4 @@ public class ItemDto {
 	LocalDate returnDate;
 	int charge;
 	boolean type;
-	
-    // @DateTimeFormat(pattern="yyyy-MM-dd")
-    public void setreturnDate(LocalDate returnDate) {
-        this.returnDate = returnDate;
-    }
-
 }
