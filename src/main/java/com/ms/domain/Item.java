@@ -8,7 +8,10 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
 
+import org.hibernate.annotations.NotFound;
+import org.hibernate.annotations.NotFoundAction;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import lombok.AllArgsConstructor;
@@ -26,15 +29,15 @@ public class Item {
 	int itemIdx;
 
 	@ManyToOne
-    @JoinColumn(name = "userIdx")
-    User user;
-	
+	@JoinColumn(name = "userIdx")
+	User user;
+
 	String title;
 	String content;
-	
+
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	Date returnDate;
-	
+
 	String charge;
 	boolean type;
 
@@ -47,12 +50,15 @@ public class Item {
 		this.charge = charge;
 		this.type = type;
 	}
-	
+
 	@Builder
 	public void update(String title, String content, String charge, boolean type) {
-		this.title = title;
-		this.content = content;
-		this.charge = charge;
-		this.type = type;
+
+			this.title = title;
+			this.content = content;
+
+			this.charge = charge;
+
+			this.type = type;
 	}
 }

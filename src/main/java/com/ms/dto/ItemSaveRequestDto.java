@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class ItemSaveRequestDto {
-	int itemIdx;
 	String title;
 	String userId;
 	String content;
@@ -25,9 +24,8 @@ public class ItemSaveRequestDto {
 	}
 
 	@Builder
-	public ItemSaveRequestDto(int itemIdx, String title, String userId, String content, Date returnDate, String charge,
+	public ItemSaveRequestDto(String title, String userId, String content, Date returnDate, String charge,
 			boolean type) {
-		this.itemIdx = itemIdx;
 		this.title = title;
 		this.userId = userId;
 		this.content = content;

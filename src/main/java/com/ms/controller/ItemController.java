@@ -2,6 +2,7 @@ package com.ms.controller;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +22,7 @@ import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.service.ItemService;
 import com.ms.service.UserService;
+import com.ms.interfaces.*;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -34,14 +36,25 @@ public class ItemController {
 
 	// read list
 	@GetMapping("/list")
-	public List<Item> item() {		 
-		return itemService.findAll();
+	public List<ProjectItem> item() {
+		List<Item> items = itemService.findAll();
+		
+		List<ProjectItem> newItems = new ArrayList<ProjectItem>();	
+		
+		for(Item item : items) {
+			newItems.add(new ProjectItem(item));
+		}
+		
+		
+		return newItems;
 	}
 
 	// read one
 	@GetMapping("/{itemIdx}")
-	public Item item(@PathVariable("itemIdx") int itemIdx) {
-		return itemService.findById(itemIdx).get();
+	public ProjectItem item(@PathVariable("itemIdx") int itemIdx) {
+		Item item = itemService.findById(itemIdx).get();
+		
+		return new ProjectItem(item);
 	}
 
 	// create

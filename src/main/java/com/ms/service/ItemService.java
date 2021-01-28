@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.Item;
@@ -13,8 +14,8 @@ import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.repository.ItemRepository;
 import com.ms.repository.UserRepository;
 
-@Service
 
+@Service
 public class ItemService {
 
 	@Autowired
@@ -22,8 +23,11 @@ public class ItemService {
 	@Autowired
 	UserRepository userRepository;
 
-	public Integer saveItem(ItemSaveRequestDto itemSaveRequestDto) {
+	public Item saveItem(ItemSaveRequestDto itemSaveRequestDto) {
+		System.out.println(itemSaveRequestDto.getUserId());
+		
 		Optional<User> one = userRepository.findById(itemSaveRequestDto.getUserId());
+		
 	      User user = one.get();
 		Item item = Item.builder()
 				.title(itemSaveRequestDto.getTitle())
@@ -34,8 +38,7 @@ public class ItemService {
 				.type(itemSaveRequestDto.isType())
 				.build();
 				
-		itemRepository.save(item);
-		return itemSaveRequestDto.getItemIdx();
+		return itemRepository.save(item);
 	}
 
 	public List<Item> findAll() {
@@ -48,8 +51,10 @@ public class ItemService {
 
 	public Integer update(int itemIdx, ItemUpdateRequestDto itemUpdateRequestDto) {
 		Item item = itemRepository.findById(itemIdx).orElseThrow(() -> new IllegalArgumentException("해당 아이템 없음"));
+		
 		item.update(itemUpdateRequestDto.getTitle(), itemUpdateRequestDto.getContent(), itemUpdateRequestDto.getCharge(), itemUpdateRequestDto.isType());
-
+		itemRepository.save(item);
+		
 		return itemIdx;
 	}
 
