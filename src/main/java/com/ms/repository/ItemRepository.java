@@ -9,5 +9,6 @@ import com.ms.domain.Item;
 
 @Repository
 public interface ItemRepository extends JpaRepository<Item, Integer>{
+	@Override
 	Optional<Item> findById(Integer id);
 }
