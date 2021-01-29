@@ -52,13 +52,13 @@ public class TransactionRepositoryTest {
 		User testUser = userRepository.findAll().get(0);
 
 		itemRepository.save(Item.builder()
-				.itemIdx(1)
+				//.itemIdx(1)
 				.title("판매")
 				.charge("2000")
-				.userIdx(testUser.getUserIdx())
+				//.userIdx(testUser.getUserIdx())
 				.content("판매합니다")
 				.type(true)
-				.returnDate(new Date())
+				//.returnDate(new Date())
 				.build());
 		Item item = itemRepository.findAll().get(0);
 
