@@ -1,6 +1,7 @@
 package com.ms.dto;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -14,8 +15,7 @@ public class ItemSaveRequestDto {
 	String content;
 	String charge;
 	boolean type;
-	// Date returnDate;
-	//@DateTimeFormat(pattern="yyyy-MM-dd")
+	LocalDateTime registrationDate;
 	LocalDate returnDate;
 	
 	/* public void setreturnDate(Date returnDate) {
@@ -38,12 +38,13 @@ public class ItemSaveRequestDto {
 	
 	@Builder
 	public ItemSaveRequestDto(String title, String userId, String content, String charge,
-			boolean type, LocalDate returnDate) {
+			boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
 		this.title = title;
 		this.userId = userId;
 		this.content = content;
 		this.charge = charge;
 		this.type = type;
+		this.registrationDate = registrationDate;
 		this.returnDate = returnDate;
 		}
 }

@@ -1,6 +1,7 @@
 package com.ms.service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,9 +34,10 @@ public class ItemService {
 				.title(itemSaveRequestDto.getTitle())
 				.user(user)
 				.content(itemSaveRequestDto.getContent())
-				.returnDate(LocalDate.now().plusDays(7))
 				.charge(itemSaveRequestDto.getCharge())
 				.type(itemSaveRequestDto.isType())
+				.registrationDate(LocalDateTime.now())
+				.returnDate(LocalDate.now().plusDays(7))
 				.build();
 				
 		return itemRepository.save(item);

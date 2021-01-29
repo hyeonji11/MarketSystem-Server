@@ -1,6 +1,7 @@
 package com.ms.domain;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,24 +27,24 @@ public class Item {
 	@ManyToOne
 	@JoinColumn(name = "userIdx")
 	User user;
-
+	
 	String title;
 	String content;
-
-	//	@DateTimeFormat(pattern = "yyyy-MM-dd")
-	LocalDate returnDate;
-
 	String charge;
 	boolean type;
 
+	LocalDateTime registrationDate;
+	LocalDate returnDate;
+	
 	@Builder
-	public Item(User user, String title, String content, LocalDate returnDate, String charge, boolean type) {
+	public Item(User user, String title, String content, String charge, boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
 		this.user = user;
 		this.title = title;
 		this.content = content;
-		this.returnDate = returnDate;
 		this.charge = charge;
 		this.type = type;
+		this.registrationDate = registrationDate;
+		this.returnDate = returnDate;
 	}
 
 	@Builder
