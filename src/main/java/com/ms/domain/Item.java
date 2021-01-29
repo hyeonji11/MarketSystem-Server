@@ -1,14 +1,16 @@
 package com.ms.domain;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
-import org.springframework.format.annotation.DateTimeFormat;
-
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,34 +18,43 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor
+@AllArgsConstructor
 public class Item {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	int itemIdx;
 
-	int userIdx;
+	@ManyToOne
+	@JoinColumn(name = "userIdx")
+	User user;
+	
 	String title;
 	String content;
-	Date returnDate;
 	String charge;
 	boolean type;
 
-	@Builder
-	public Item(int itemIdx, int userIdx, String title, String content, Date returnDate, String charge, boolean type) {
-		this.itemIdx = itemIdx;
-		this.userIdx = userIdx;
-		this.title = title;
-		this.content = content;
-		this.returnDate = returnDate;
-		this.charge = charge;
-		this.type = type;
-	}
+	LocalDateTime registrationDate;
+	LocalDate returnDate;
 	
-	public void update(String title, String content, String charge, boolean type) {
+	@Builder
+	public Item(User user, String title, String content, String charge, boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
+		this.user = user;
 		this.title = title;
 		this.content = content;
 		this.charge = charge;
 		this.type = type;
+		this.registrationDate = registrationDate;
+		this.returnDate = returnDate;
+	}
+
+	@Builder
+	public void update(String title, String content, String charge, boolean type) {
+
+			this.title = title;
+			this.content = content;
+
+			this.charge = charge;
+
+			this.type = type;
 	}
 }
