@@ -1,7 +1,5 @@
 package com.ms.domain;
 
-import java.sql.Timestamp;
-
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -18,14 +16,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class ChatMessage {
+public class ChatList {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	int chatMessageIdx;
-
-	String message;
-	Timestamp sendTime;
+	int chatListIdx;
 
 	@ManyToOne
 	@JoinColumn(name = "userIdx")
@@ -36,9 +31,7 @@ public class ChatMessage {
 	ChatRoom chatRoom;
 
 	@Builder
-	public ChatMessage(String message, Timestamp sendTime, User user, ChatRoom chatRoom) {
-		this.message = message;
-		this.sendTime = sendTime;
+	public ChatList(User user, ChatRoom chatRoom) {
 		this.user = user;
 		this.chatRoom = chatRoom;
 	}
