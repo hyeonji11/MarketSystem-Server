@@ -133,10 +133,10 @@ public class ChatRoomControllerTest {
 //				.andReturn();
 
 		mockMvc.perform(get("/chat/list")
-				.param("userIdx", Integer.toString(user2.getUserIdx())))
+				.param("userIdx", Integer.toString(user.getUserIdx())))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()", is(1)))
-				.andExpect(jsonPath("$[0].name").value(user.getName()));
+				.andExpect(jsonPath("$[0].name").value(user2.getName()));
 
 //		ObjectMapper mapper = new ObjectMapper();
 //		String str = result.getResponse().getContentAsString();

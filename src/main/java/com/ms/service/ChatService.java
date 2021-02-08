@@ -25,12 +25,6 @@ public class ChatService {
 
 	public List<ChatRoomResponseDto> findAllRoom(int userIdx) {
 		List<ChatRoomResponseDto> roomList = chatListRepository.findUserByChatRoom(userIdx);
-		for(ChatRoomResponseDto dto : roomList) {
-			if(dto.getUserIdx() == userIdx) {
-				roomList.remove(dto);
-				break;
-			}
-		}
 
 		Collections.reverse(roomList);
 		return roomList;
