@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.User;
 import com.ms.dto.UserDto;
+import com.ms.dto.UserResponse;
 import com.ms.service.JwtUserDetailsService;
 import com.ms.service.UserService;
 
@@ -58,9 +59,10 @@ public class UserController {
 	@GetMapping("/update")
 	public ResponseEntity<?> getUser(@RequestParam String id) {
 		User user = userService.getUserOne(id);
-		UserDto result = userService.userToDto(user);
-		result.setPw("");
-		return new ResponseEntity(result, HttpStatus.OK);
+		UserResponse res = userService.userToResponse(user);
+		//UserDto result = userService.userToDto(user);
+		//result.setPw("");
+		return new ResponseEntity(res, HttpStatus.OK);
 	}
 
 	@PutMapping("/update")
@@ -73,7 +75,20 @@ public class UserController {
 
 		User result = userService.signUpUser(req);
 		//String userId = userDetailsService.save(user);
-		UserDto dto = userService.userToDto(result);
-		return new ResponseEntity(dto, HttpStatus.OK);
+		UserResponse res = userService.userToResponse(result);
+		//UserDto dto = userService.userToDto(result);
+		return new ResponseEntity(res, HttpStatus.OK);
+	}
+
+	@GetMapping("/check")
+	public ResponseEntity<?> checkId(@RequestParam String id) {
+		User user = userService.getUserOne(id);
+
+		HttpHeaders resHeaders = new HttpHeaders();
+		resHeaders.add("Content-Type", "application/json;charset=UTF-8");
+
+		if(user != null)
+			return new ResponseEntity("중복된 아이디입니다.", resHeaders, HttpStatus.OK);
+		return new ResponseEntity("사용 가능합니다.", resHeaders, HttpStatus.OK);
 	}
 }

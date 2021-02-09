@@ -2,7 +2,7 @@ package com.ms.controller;
 
 import static org.hamcrest.CoreMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
@@ -20,6 +20,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ms.dto.JwtRequest;
 import com.ms.dto.UserDto;
 import com.ms.service.JwtUserDetailsService;
+import com.ms.service.UserService;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -29,7 +30,10 @@ public class JwtAuthenticationControllerTest {
 	private MockMvc mvc;
 
 	@Autowired
-	private JwtUserDetailsService userService;
+	private JwtUserDetailsService jwtUserService;
+
+	@Autowired
+	private UserService userService;
 
 	@Autowired
 	private JwtAuthenticationController jwtAuthenticationController;
@@ -50,7 +54,7 @@ public class JwtAuthenticationControllerTest {
 		userDto.setEmail("test111@naver.com");
 		userDto.setPhone("010-3311-3311");
 
-		userService.save(userDto);
+		jwtUserService.save(userDto);
 
 		JwtRequest req = new JwtRequest("id11", "pw11");
 
@@ -59,7 +63,10 @@ public class JwtAuthenticationControllerTest {
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(new ObjectMapper().writeValueAsString(req)))
 			.andExpect(status().isOk())
-			.andExpect(content().string(any(String.class)));
+			.andExpect(jsonPath("$.jwtToken").value(any(String.class)))
+			.andExpect(jsonPath("$.userIdx").value(any(Integer.class)))
+			.andExpect(jsonPath("$.id").value("id11"));
+			//.andExpect(content().string(any(String.class)));
 	}
 
 }

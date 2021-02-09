@@ -18,7 +18,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -28,6 +27,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ms.domain.User;
 import com.ms.dto.UserDto;
+import com.ms.dto.UserResponse;
 import com.ms.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -171,7 +171,7 @@ public class UserControllerTest {
 				.param("id", userDto.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.id").value(userDto.getId()))
-				.andExpect(jsonPath("$.pw").value(""))
+				//.andExpect(jsonPath("$.pw").value(""))
 				.andExpect(jsonPath("$.email").value(userDto.getEmail()));
 	}
 
@@ -187,7 +187,7 @@ public class UserControllerTest {
 		userDto.setPw(pw);
 
 		//when&then
-		BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+		//BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
 		MvcResult result = mockMvc.perform(put("/user/update")
 				.contentType(MediaType.APPLICATION_JSON)
@@ -198,9 +198,32 @@ public class UserControllerTest {
 
 		String str = result.getResponse().getContentAsString();
 		ObjectMapper mapper = new ObjectMapper();
-		User user = mapper.readValue(str, User.class);
+		UserResponse user = mapper.readValue(str, UserResponse.class);
+		//assertThat(passwordEncoder.matches(pw, user.getPw())).isTrue();
+	}
 
-		assertThat(passwordEncoder.matches(pw, user.getPw())).isTrue();
+	@Test
+	public void checkId_duplicatedId_returnMessage() throws Exception {
+		//given
+		userController.signUp(userDto);
+
+		//when&then
+		mockMvc.perform(get("/user/check")
+				.param("id", userDto.getId()))
+				.andExpect(status().isOk())
+				.andExpect(content().string("중복된 아이디입니다."));
+	}
+
+	@Test
+	public void checkId_originalId_returnMessage() throws Exception {
+		//given
+		userController.signUp(userDto);
+
+		//when&then
+		mockMvc.perform(get("/user/check")
+				.param("id", "ididid222"))
+				.andExpect(status().isOk())
+				.andExpect(content().string("사용 가능합니다."));
 	}
 
 }
