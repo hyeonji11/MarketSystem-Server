@@ -104,7 +104,7 @@ public class ChatServiceTest {
 		user.setUserIdx(1);
 		user2.setUserIdx(2);
 
-		Item item = Item.builder().itemIdx(1).title("title").userIdx(1).build();
+		Item item = Item.builder().title("title").user(user).build();
 		Optional<Item> testItem = Optional.of(item);
 		Optional<User> testUser1 = Optional.of(user);
 		Optional<User> testUser2 = Optional.of(user2);
