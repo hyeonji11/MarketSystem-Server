@@ -27,7 +27,7 @@ public class Item {
 	@ManyToOne
 	@JoinColumn(name = "userIdx")
 	User user;
-	
+
 	String title;
 	String content;
 	String charge;
@@ -35,7 +35,7 @@ public class Item {
 
 	LocalDateTime registrationDate;
 	LocalDate returnDate;
-	
+
 	@Builder
 	public Item(User user, String title, String content, String charge, boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
 		this.user = user;

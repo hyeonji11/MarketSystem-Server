@@ -2,7 +2,8 @@ package com.ms.repository;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import org.junit.After;
 import org.junit.Test;
@@ -52,13 +53,13 @@ public class TransactionRepositoryTest {
 		User testUser = userRepository.findAll().get(0);
 
 		itemRepository.save(Item.builder()
-				//.itemIdx(1)
 				.title("판매")
 				.charge("2000")
-				//.userIdx(testUser.getUserIdx())
+				.user(testUser)
 				.content("판매합니다")
 				.type(true)
-				//.returnDate(new Date())
+				.registrationDate(LocalDateTime.now())
+				.returnDate(LocalDate.now())
 				.build());
 		Item item = itemRepository.findAll().get(0);
 
