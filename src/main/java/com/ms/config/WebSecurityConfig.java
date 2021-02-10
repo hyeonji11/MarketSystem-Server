@@ -52,7 +52,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 		httpSecurity.csrf().disable()
 				.cors().disable()
 				.formLogin().disable()
-				.authorizeRequests().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw", "/**","/hello").permitAll().
+				.authorizeRequests().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw","/hello").permitAll().
 				anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
