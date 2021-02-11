@@ -57,7 +57,6 @@ public class ChatService {
 		Item item = itemRepository.findById(createDto.getItemIdx()).get();
 		User user1 = userRepository.findById(createDto.getUserIdx()).get();
 		User user2 = userRepository.findById(item.getUser().getUserIdx()).get();
-		//item.user.getUserIdx()로 수정 필요
 
 		ChatRoom chatRoom = ChatRoom.builder().name(item.getTitle()).build();
 		chatRoomRepository.save(chatRoom);

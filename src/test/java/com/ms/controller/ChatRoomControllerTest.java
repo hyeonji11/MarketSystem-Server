@@ -1,7 +1,7 @@
 package com.ms.controller;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.CoreMatchers.is;
-import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -10,10 +10,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +28,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ms.domain.ChatList;
 import com.ms.domain.ChatMessage;
 import com.ms.domain.ChatRoom;
+import com.ms.domain.Item;
 import com.ms.domain.User;
 import com.ms.dto.ChatCreateRequestDto;
 import com.ms.repository.ChatListRepository;
@@ -64,7 +65,6 @@ public class ChatRoomControllerTest {
 	private User user;
 	private User user2;
 	private ChatRoom chatRoom;
-	//private ChatMessage chatMessage;
 
 	@Before
 	public void setUp() {
@@ -90,15 +90,10 @@ public class ChatRoomControllerTest {
 				.name("itemTitle")
 				.build();
 
-//		ChatRoom chatRoom2 = ChatRoom.builder()
-//				.name("itemTitle2")
-//				.build();
-
 		userRepository.save(user);
 		userRepository.save(user2);
 
 		chatRoomRepository.save(chatRoom);
-		//chatRoomRepository.save(chatRoom2);
 
 		chatListRepository.save(ChatList.builder()
 				.user(user)
@@ -110,17 +105,6 @@ public class ChatRoomControllerTest {
 				.chatRoom(chatRoom)
 				.build());
 
-//		chatListRepository.save(ChatList.builder()
-//				.user(user)
-//				.chatRoom(chatRoom2)
-//				.build());
-//		chatMessage = ChatMessage.builder()
-//				.message("test")
-//				.sendTime(Timestamp.valueOf(LocalDateTime.now()))
-//				.user(user)
-//				.chatRoom(chatRoom)
-//				.build();
-
 	}
 
 	@After
@@ -128,6 +112,7 @@ public class ChatRoomControllerTest {
 		chatListRepository.deleteAll();
 		chatMessageRepository.deleteAll();
 		chatRoomRepository.deleteAll();
+		itemRepository.deleteAll();
 		userRepository.deleteAll();
 	}
 
@@ -136,33 +121,23 @@ public class ChatRoomControllerTest {
 		//given
 
 		//when&then
-//		MvcResult result = mockMvc.perform(get("/chat/list")
-//				.param("userIdx", Integer.toString(user2.getUserIdx())))
-//				.andExpect(status().isOk())
-//				.andReturn();
-
 		mockMvc.perform(get("/chat/list")
 				.param("userIdx", Integer.toString(user.getUserIdx())))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.length()", is(1)))
 				.andExpect(jsonPath("$[0].name").value(user2.getName()));
-
-//		ObjectMapper mapper = new ObjectMapper();
-//		String str = result.getResponse().getContentAsString();
-//
-//		List<ChatRoomResponseDto> list = mapper.readValue(str, List.class);
-//
-//		System.out.println(list.get(0).getName());
-//		assertThat(list.size()).isEqualTo(1);
-//		assertThat(list.get(0).getName()).isEqualTo(user.getName());
 	}
 
 	@Test
-	@Ignore
 	public void createRoom_joinUsers_returnChatRoomIdx() throws Exception {
-		//최신 develop으로 바꾼 후 테스트 해야함
-
 		//given
+		itemRepository.save(Item.builder()
+				.user(user2)
+				.title("item1")
+				.content("content1")
+				.charge("1000")
+				.build());
+
 		ChatCreateRequestDto createDto = new ChatCreateRequestDto();
 		createDto.setItemIdx(1);
 		createDto.setUserIdx(1);
@@ -171,15 +146,13 @@ public class ChatRoomControllerTest {
 		mockMvc.perform(post("/chat/create")
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(new ObjectMapper().writeValueAsString(createDto)))
-				.andExpect(status().isOk())
-				.andExpect(jsonPath("$.chatRoomIdx").value(any(Integer.class)));
+				.andExpect(status().isOk());
 
-//		ObjectMapper mapper = new ObjectMapper();
-//		String str = result.getResponse().getContentAsString();
-//		int roomIdx = mapper.readValue(str, Integer.class);
+		List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
+		assertThat(chatRoomList.size()).isEqualTo(2);
 
-		//List<ChatList> list = chatListRepository.findAll();
-		//assertThat(list.get(3).getChatRoom().getChatRoomIdx()).isEqualTo(2);
+		List<ChatList> chatList = chatListRepository.findAll();
+		assertThat(chatList.size()).isEqualTo(4);
 	}
 
 	@Test
