@@ -51,30 +51,12 @@ public class ItemService {
 		User user = one.get();
 		
 		item.setUser(user);
-		
-		//item.getUser().setId(itemSaveRequestDto.getUserId());
-		//item.setUser(itemSaveRequestDto.getUserId());
 		item.setContent(itemSaveRequestDto.getContent());
 		item.setCharge(itemSaveRequestDto.getCharge());
 		item.setType(itemSaveRequestDto.isType());
 		item.setRegistrationDate(LocalDateTime.now());
 		item.setReturnDate(LocalDate.now().plusDays(7));
 		
-		/*
-		Optional<User> one = userRepository.findById(itemSaveRequestDto.getUserId());
-		
-	    User user = one.get();
-			Item item = Item.builder()
-				.title(itemSaveRequestDto.getTitle())
-				.user(user)
-				.content(itemSaveRequestDto.getContent())
-				.charge(itemSaveRequestDto.getCharge())
-				.type(itemSaveRequestDto.isType())
-				.registrationDate(LocalDateTime.now())
-				.returnDate(LocalDate.now().plusDays(7))
-				// .image(image)
-				.build();
-		*/
 		return item;
 	}
 	
@@ -112,7 +94,6 @@ public class ItemService {
 			System.out.println(savedName);
 
 			byte[] bytes = file.getBytes();
-			//Path path = Paths.get(UPLOADED_FOLDER + file.getOriginalFilename());
 			Path path = Paths.get(folder + savedName);
 			System.out.println("path: "+path);
 			Files.write(path, bytes);

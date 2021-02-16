@@ -61,9 +61,8 @@ public class ItemController {
 	}
 
 	// create
-	// @RequestMapping(value = "/save" , method = RequestMethod.POST, consumes = {"multipart/form-data" })
 	@PostMapping("/save")
-	public ResponseEntity<?> save(/*@RequestBody @RequestParam*/ @ModelAttribute ItemSaveRequestDto itemSaveRequestDto) {
+	public ResponseEntity<?> save(@ModelAttribute ItemSaveRequestDto itemSaveRequestDto) {
 		System.out.println("itemIdx : "+itemSaveRequestDto.getUserId());
 		int itemIdx = itemService.saveItem(itemSaveRequestDto);
 		System.out.println("itemIdx : "+itemIdx);

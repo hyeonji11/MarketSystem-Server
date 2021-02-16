@@ -22,13 +22,5 @@ public class Image {
 	
 	String imageOriName;
 	String imageUrl;
-	
-	/* @Builder
-	public Image(int imgaeIdx, Item item, String imageName, String imageOriName, String imageUrl) {
-		this.imageIdx = imageIdx;
-		this.item = item;
-		this.imageName = imageName;
-		this.imageOriName = imageOriName;
-		this.imageUrl = imageUrl;
-	} */
+
 }
