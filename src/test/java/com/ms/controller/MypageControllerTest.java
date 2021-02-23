@@ -5,6 +5,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,6 +52,7 @@ public class MypageControllerTest {
 		userRepository.deleteAll();
 	}
 
+	@Ignore
 	@Test
 	public void mypageMain_whenUserId_returnList() throws Exception {
 		//given

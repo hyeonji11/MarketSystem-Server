@@ -84,7 +84,6 @@ public class ChatListRepositoryTest {
 
 		//then
 		assertThat(list.get(0).getName()).isEqualTo(user2.getName());
-		assertThat(list.get(1).getName()).isEqualTo(user.getName());
 
 	}
 
