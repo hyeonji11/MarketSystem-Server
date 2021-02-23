@@ -1,20 +1,33 @@
 package com.ms.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
+
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.domain.User;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
+import com.ms.interfaces.SearchItem;
+import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
 import com.ms.repository.UserRepository;
-
 
 @Service
 public class ItemService {
@@ -23,45 +36,159 @@ public class ItemService {
 	ItemRepository itemRepository;
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	ImageRepository imageRepository;
 
-	public Item saveItem(ItemSaveRequestDto itemSaveRequestDto) {
-		System.out.println(itemSaveRequestDto.getUserId());
-		
-		Optional<User> one = userRepository.findById(itemSaveRequestDto.getUserId());
-		
-	      User user = one.get();
-		Item item = Item.builder()
-				.title(itemSaveRequestDto.getTitle())
-				.user(user)
-				.content(itemSaveRequestDto.getContent())
-				.charge(itemSaveRequestDto.getCharge())
-				.type(itemSaveRequestDto.isType())
-				.registrationDate(LocalDateTime.now())
-				.returnDate(LocalDate.now().plusDays(7))
-				.build();
-				
-		return itemRepository.save(item);
+	public int saveItem(ItemSaveRequestDto itemSaveRequestDto) {
+		Item item = createItem(itemSaveRequestDto);
+		itemRepository.save(item);
+		return item.getItemIdx();
 	}
 
-	public List<Item> findAll() {
-		return itemRepository.findAll();
+	public Item createItem(ItemSaveRequestDto itemSaveRequestDto) {
+		System.out.println(itemSaveRequestDto.getUserId());
+
+		Item item = new Item();
+		item.setTitle(itemSaveRequestDto.getTitle());
+
+		Optional<User> one = userRepository.findById(itemSaveRequestDto.getUserId());
+		System.out.println(one.isPresent());
+		User user = one.get();
+
+		item.setUser(user);
+		item.setContent(itemSaveRequestDto.getContent());
+		item.setCharge(itemSaveRequestDto.getCharge());
+		item.setType(itemSaveRequestDto.isType());
+		item.setRegistrationDate(LocalDateTime.now());
+		item.setReturnDate(LocalDate.now().plusDays(7));
+
+		return item;
+	}
+
+	public void uploadImages(List<MultipartFile> images, int itemIdx) throws IOException {
+		Calendar cal = Calendar.getInstance();
+
+		int year = cal.get(Calendar.YEAR);
+		int month = cal.get(Calendar.MONTH) + 1;
+
+		String folder = "/" + year + "/" + month + "/"; // '년/월'로 폴더 경로 지정
+		System.out.println(folder);
+		File newfile = new File(folder);
+
+		if (!newfile.exists()) {// 폴더 있는지 검사
+			try {
+				newfile.mkdirs();// 없으면 저장된 경로로 폴더 생성
+				System.out.println("폴더 생성");
+			} catch (Exception e) {
+				e.getStackTrace();
+			}
+		} else {
+			System.out.println("이미 폴더 있음");
+		}
+
+		if (imageRepository.findById(itemIdx) != null) {
+			imageRepository.deleteByItem_ItemIdx(itemIdx);
+		}
+
+		for (MultipartFile file : images) {
+			if (file.isEmpty()) {
+				continue;
+			}
+
+			// 중복되지 않는 값을 사용해 파일명 설정
+			UUID uid = UUID.randomUUID();
+			String savedName = uid.toString() + "_" + file.getOriginalFilename();
+			System.out.println(savedName);
+
+			byte[] bytes = file.getBytes();
+			Path path = Paths.get(folder + savedName);
+			System.out.println("path: " + path);
+			Files.write(path, bytes);
+
+			Image i = new Image();
+			i.setItem(new Item());
+			i.getItem().setItemIdx(itemIdx);
+			i.setImageOriName(file.getOriginalFilename());
+			i.setImageUrl(savedName);
+
+			imageRepository.save(i);
+		}
+	}
+
+	public List<SearchItem> findAll() {
+		List<Item> itemList = itemRepository.findAll();
+
+		List<SearchItem> searchItemList = new ArrayList<SearchItem>();
+
+		if (itemList.isEmpty())
+			return null;
+
+		for (Item item : itemList) {
+			SearchItem searchItem = new SearchItem(item);
+			if (imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).size() != 0) {
+				Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
+				searchItem.setImage(image);
+			}
+
+			searchItemList.add(searchItem);
+
+		}
+
+		return searchItemList;
+
+	}
+
+	public List<Image> callImages(int itemIdx) {
+		return imageRepository.findAllByItem_ItemIdx(itemIdx);
 	}
 
 	public Optional<Item> findById(Integer itemIdx) {
 		return itemRepository.findById(itemIdx);
 	}
 
-	public Integer update(int itemIdx, ItemUpdateRequestDto itemUpdateRequestDto) {
+	public Integer update(int itemIdx, ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
 		Item item = itemRepository.findById(itemIdx).orElseThrow(() -> new IllegalArgumentException("해당 아이템 없음"));
-		
-		item.update(itemUpdateRequestDto.getTitle(), itemUpdateRequestDto.getContent(), itemUpdateRequestDto.getCharge(), itemUpdateRequestDto.isType());
+
+		item.setTitle(itemUpdateRequestDto.getTitle());
+		item.setContent(itemUpdateRequestDto.getContent());
+		item.setCharge(itemUpdateRequestDto.getCharge());
+		item.setType(itemUpdateRequestDto.isType());
+		item.setRegistrationDate(LocalDateTime.now());
+		item.setReturnDate(LocalDate.now().plusDays(7));
+
 		itemRepository.save(item);
-		
+
 		return itemIdx;
 	}
 
 	public Integer delete(int itemIdx) {
+		if (imageRepository.findById(itemIdx) != null) {
+			imageRepository.deleteByItem_ItemIdx(itemIdx);
+		}
 		itemRepository.deleteById(itemIdx);
 		return itemIdx;
 	}
+
+	@Transactional
+	public List<SearchItem> search(String keyword) {
+		List<Item> itemList = itemRepository.findByTitleContaining(keyword);
+
+		List<SearchItem> searchItemList = new ArrayList<SearchItem>();
+
+		if (itemList.isEmpty())
+			return null;
+
+		for (Item item : itemList) {
+			Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
+
+			SearchItem searchItem = new SearchItem(item);
+			searchItem.setImage(image);
+
+			searchItemList.add(searchItem);
+
+		}
+
+		return searchItemList;
+	}
+
 }

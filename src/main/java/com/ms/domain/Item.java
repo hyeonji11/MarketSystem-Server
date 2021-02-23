@@ -12,10 +12,10 @@ import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Getter
+@Data
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
@@ -45,16 +45,17 @@ public class Item {
 		this.type = type;
 		this.registrationDate = registrationDate;
 		this.returnDate = returnDate;
-	}
-
+	} 
+	
 	@Builder
-	public void update(String title, String content, String charge, boolean type) {
-
-			this.title = title;
-			this.content = content;
-
-			this.charge = charge;
-
-			this.type = type;
+	public void update(String title, String content, String charge,
+			boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
+		this.title = title;
+		this.content = content;
+		this.charge = charge;
+		this.type = type;
+		this.registrationDate = registrationDate;
+		this.returnDate = returnDate;
 	}
+	
 }

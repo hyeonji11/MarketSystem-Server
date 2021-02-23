@@ -3,26 +3,34 @@ package com.ms.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+@Setter
 @Getter
 @NoArgsConstructor
 public class ItemUpdateRequestDto {
-	private String title;
-	private String content;
-	private String charge;
-	private boolean type;
-	private LocalDateTime registrationDate;
+	String title;
+	String content;
+	String charge;
+	boolean type;
+	LocalDateTime registrationDate;
+	LocalDate returnDate;
+	MultipartFile[] images;
 
 	@Builder
 	public ItemUpdateRequestDto(String title, String content, String charge,
-			boolean type, LocalDateTime registrationDate) {
+			boolean type, LocalDateTime registrationDate, LocalDate returnDate, MultipartFile[] images) {
 		this.title = title;
 		this.content = content;
 		this.charge = charge;
 		this.type = type;
 		this.registrationDate = registrationDate;
+		this.returnDate = returnDate;
+		this.images = images;
 	}
 }
