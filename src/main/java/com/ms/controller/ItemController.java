@@ -1,7 +1,6 @@
 package com.ms.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -14,7 +13,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +21,7 @@ import com.ms.domain.Item;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.interfaces.ProjectItem;
+import com.ms.interfaces.SearchItem;
 import com.ms.service.ItemService;
 import com.ms.service.UserService;
 
@@ -40,16 +39,9 @@ public class ItemController {
 
 	// read list
 	@GetMapping("/list")
-	public List<ProjectItem> item() {
-		List<Item> items = itemService.findAll();
+	public List<SearchItem> item() {
 
-		List<ProjectItem> newItems = new ArrayList<ProjectItem>();
-
-		for (Item item : items) {
-			newItems.add(new ProjectItem(item));
-		}
-
-		return newItems;
+		return itemService.findAll();
 	}
 
 	// read one
@@ -57,17 +49,25 @@ public class ItemController {
 	public ProjectItem item(@PathVariable("itemIdx") int itemIdx) {
 		Item item = itemService.findById(itemIdx).get();
 
-		return new ProjectItem(item);
+		ProjectItem projectItem = new ProjectItem(item);
+		projectItem.setImageList(itemService.callImages(itemIdx));
+
+		return projectItem;
+	}
+
+	// search
+	@GetMapping("/search")
+	public List<SearchItem> search(@RequestParam(value = "keyword") String keyword) {
+
+		return itemService.search(keyword);
 	}
 
 	// create
 	@PostMapping("/save")
 	public ResponseEntity<?> save(@ModelAttribute ItemSaveRequestDto itemSaveRequestDto) {
-		System.out.println("itemIdx : "+itemSaveRequestDto.getUserId());
 		int itemIdx = itemService.saveItem(itemSaveRequestDto);
-		System.out.println("itemIdx : "+itemIdx);
-		
-		if(itemSaveRequestDto.getImages()!=null) {
+
+		if (itemSaveRequestDto.getImages() != null) {
 			try {
 				itemService.uploadImages(Arrays.asList(itemSaveRequestDto.getImages()), itemIdx);
 			} catch (IOException e) {
@@ -75,15 +75,24 @@ public class ItemController {
 			}
 		}
 
-		System.out.println(itemSaveRequestDto.getTitle());
 		return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
 	}
 
 	// update
 	@PutMapping("/{itemIdx}")
-	public String update(@PathVariable int itemIdx, @RequestBody ItemUpdateRequestDto itemUpdateRequestDto) {
+	public ResponseEntity<?> update(@PathVariable int itemIdx,
+			@ModelAttribute ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
 		itemService.update(itemIdx, itemUpdateRequestDto);
-		return "success";
+
+		if (itemUpdateRequestDto.getImages() != null) {
+			try {
+				itemService.uploadImages(Arrays.asList(itemUpdateRequestDto.getImages()), itemIdx);
+			} catch (IOException e) {
+				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			}
+		}
+
+		return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
 	}
 
 	// delete
@@ -92,4 +101,5 @@ public class ItemController {
 		itemService.delete(itemIdx);
 		return "success";
 	}
+
 }

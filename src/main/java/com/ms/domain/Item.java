@@ -36,7 +36,6 @@ public class Item {
 	@JoinColumn(name = "userIdx")
 	User user;
 	
-	
 	@Builder
 	public Item(User user, String title, String content, String charge, boolean type, LocalDateTime registrationDate, LocalDate returnDate) {
 		this.user = user;
