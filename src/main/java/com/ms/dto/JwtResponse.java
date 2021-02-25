@@ -8,15 +8,17 @@ public class JwtResponse implements Serializable {
 	private final String jwttoken;
 	private int userIdx;
 	private String id;
+	private String name;
 
 	public JwtResponse(String jwttoken) {
 		this.jwttoken = jwttoken;
 	}
 
-	public JwtResponse(String jwttoken, int userIdx, String id) {
+	public JwtResponse(String jwttoken, int userIdx, String id, String name) {
 		this.jwttoken = jwttoken;
 		this.userIdx = userIdx;
 		this.id = id;
+		this.name = name;
 	}
 
 	public String getJwtToken() {
@@ -29,5 +31,9 @@ public class JwtResponse implements Serializable {
 
 	public String getId() {
 		return this.id;
+	}
+
+	public String getName() {
+		return this.name;
 	}
 }

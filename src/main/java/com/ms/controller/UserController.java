@@ -53,7 +53,7 @@ public class UserController {
 		if(isFind) {
 			return new ResponseEntity("메일 전송 완료", resHeaders, HttpStatus.OK);
 		}
-		return new ResponseEntity("아이디 혹은 이메일이 옳지 않습니다.", resHeaders, HttpStatus.OK);
+		return new ResponseEntity("아이디 혹은 이메일이 옳지 않습니다.", resHeaders, HttpStatus.BAD_REQUEST);
 	}
 
 	@GetMapping("/update")

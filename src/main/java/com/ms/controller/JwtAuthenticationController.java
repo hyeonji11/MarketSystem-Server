@@ -48,7 +48,7 @@ public class JwtAuthenticationController {
 
 		User user = userService.getUserOne(authenticationRequest.getId());
 
-		JwtResponse jwtResponse = new JwtResponse(token, user.getUserIdx(), user.getId());
+		JwtResponse jwtResponse = new JwtResponse(token, user.getUserIdx(), user.getId(), user.getName());
 
 		return ResponseEntity.ok(jwtResponse);
 	}
