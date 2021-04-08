@@ -32,6 +32,7 @@ public class MypageController {
 
 	@GetMapping("/purchase")
 	public ResponseEntity<?> purchaseList(@RequestParam String userId) {
-		return new ResponseEntity(HttpStatus.OK);
+		List<SearchItem> purchaseList = mypageService.getPurchaseList(userId);
+		return new ResponseEntity(purchaseList, HttpStatus.OK);
 	}
 }

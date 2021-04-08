@@ -29,7 +29,7 @@ public class Transaction {
 	Item item;
 
 	@ManyToOne
-	@JoinColumn(name="userIdx")
+	@JoinColumn(name="traderIdx")
 	User user;
 
 	@Builder

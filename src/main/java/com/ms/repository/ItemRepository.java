@@ -15,4 +15,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer>{
 	Optional<Item> findById(Integer id);
 	List<Item> findAllByUser_UserIdx(@Param(value = "userIdx") int userIdx);
 	List<Item> findByTitleContaining(String keyword);
+	List<Item> findByItemIdxIn(List<Integer> itemIdxList);
 }

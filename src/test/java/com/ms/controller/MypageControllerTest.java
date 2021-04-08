@@ -18,9 +18,11 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.ms.domain.Image;
 import com.ms.domain.Item;
+import com.ms.domain.Transaction;
 import com.ms.domain.User;
 import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
+import com.ms.repository.TransactionRepository;
 import com.ms.repository.UserRepository;
 
 @RunWith(SpringRunner.class)
@@ -37,6 +39,9 @@ public class MypageControllerTest {
 
 	@Autowired
 	private ImageRepository imageRepository;
+
+	@Autowired
+	private TransactionRepository transRepository;
 
 	@Autowired
 	private MypageController mypageController;
@@ -76,6 +81,7 @@ public class MypageControllerTest {
 
 	@After
 	public void tearDown() {
+		transRepository.deleteAll();
 		imageRepository.deleteAll();
 		itemRepository.deleteAll();
 		userRepository.deleteAll();
@@ -100,6 +106,35 @@ public class MypageControllerTest {
 		//when&then
 		mockMvc.perform(get("/mypage/sale")
 				.param("userId", user.getId()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.[0].title").value(testItem.getTitle()));
+
+	}
+
+	@Test
+	public void purchaseList_userId_purchaseListOfUser() throws Exception {
+		//given
+		User user2 = User.builder()
+				.id("id22")
+				.pw("pw22")
+				.name("사용자22")
+				.email("test22@daum.net")
+				.phone("010-2222-2222")
+				.build();
+
+		Transaction trans = Transaction.builder()
+				.state("판매완료")
+				.user(user2)
+				.item(testItem)
+				.build();
+
+		userRepository.save(user2);
+		transRepository.save(trans);
+
+
+		//when&then
+		mockMvc.perform(get("/mypage/purchase")
+				.param("userId", user2.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].title").value(testItem.getTitle()));
 

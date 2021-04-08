@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
@@ -17,10 +16,12 @@ import org.mockito.MockitoAnnotations;
 
 import com.ms.domain.Image;
 import com.ms.domain.Item;
+import com.ms.domain.Transaction;
 import com.ms.domain.User;
 import com.ms.interfaces.SearchItem;
 import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
+import com.ms.repository.TransactionRepository;
 import com.ms.repository.UserRepository;
 
 public class MypageServiceTest {
@@ -33,6 +34,9 @@ public class MypageServiceTest {
 
 	@Mock
 	private ImageRepository imageRepository;
+
+	@Mock
+	private TransactionRepository transRepository;
 
 	@InjectMocks
 	private MypageService mypageService;
@@ -66,11 +70,12 @@ public class MypageServiceTest {
 
 	}
 
-	@After
-	public void clear() {
-		itemRepository.deleteAll();
-		userRepository.deleteAll();
-	}
+//	@After
+//	public void clear() {
+//		imageRepository.deleteAll();
+//		itemRepository.deleteAll();
+//		userRepository.deleteAll();
+//	}
 
 	@Test
 	public void getSaleList_userId_itemList() {
@@ -106,10 +111,50 @@ public class MypageServiceTest {
 	@Test
 	public void getPurChaseList_userId_itemList() {
 		//given
+		User testUser2 = User.builder()
+				.id("id1")
+				.pw("pw1")
+				.name("사용자")
+				.email("test1111@naver.com")
+				.phone("010-1111-1111")
+				.build();
+
+		Transaction t = Transaction.builder()
+				.item(testItem)
+				.user(testUser2)
+				.state("판매완료")
+				.build();
+
+		testItem.setItemIdx(1);
+		testUser2.setUserIdx(2);
+
+		List<Integer> itemIdxList = new ArrayList();
+		itemIdxList.add(testItem.getItemIdx());
+
+		List<Item> itemList = new ArrayList();
+		itemList.add(testItem);
+
+		List<Image> imageList = new ArrayList<>();
+		imageList.add(testImage);
+
+		Optional<User> user = Optional.of(testUser2);
+		Mockito.when(userRepository.findById(testUser2.getId()))
+				.thenReturn(user);
+
+		Mockito.when(transRepository.findItemIdxByUserIdx(user.get().getUserIdx()))
+				.thenReturn(itemIdxList);
+
+		Mockito.when(itemRepository.findByItemIdxIn(itemIdxList))
+				.thenReturn(itemList);
+
+		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
+				.thenReturn(imageList);
 
 		//when
+		List<SearchItem> list = mypageService.getPurchaseList(testUser2.getId());
 
 		//then
-
+		assertThat(list.get(0).charge).isEqualTo(testItem.getCharge());
+		assertThat(list.get(0).itemIdx).isEqualTo(testItem.getItemIdx());
 	}
 }
