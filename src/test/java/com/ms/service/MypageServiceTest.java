@@ -157,4 +157,24 @@ public class MypageServiceTest {
 		assertThat(list.get(0).charge).isEqualTo(testItem.getCharge());
 		assertThat(list.get(0).itemIdx).isEqualTo(testItem.getItemIdx());
 	}
+
+	@Test
+	public void itemToSearchItem_itemList_searchItemList() {
+		//given
+		List<Item> itemList = new ArrayList<>();
+		itemList.add(testItem);
+
+		List<Image> imageList = new ArrayList<>();
+		imageList.add(testImage);
+
+		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
+				.thenReturn(imageList);
+
+		//when
+		List<SearchItem> siList = mypageService.itemToSearchItem(itemList);
+
+		//then
+		assertThat(siList.get(0).itemIdx).isEqualTo(testItem.getItemIdx());
+		assertThat(siList.get(0).title).isEqualTo(testItem.getTitle());
+	}
 }

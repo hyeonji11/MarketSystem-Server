@@ -27,15 +27,8 @@ public class MypageService {
 		User user = userRepository.findById(userId).get();
 
 		List<Item> itemList = itemRepository.findAllByUser_UserIdx(user.getUserIdx());
-		List<SearchItem> result = new ArrayList<>(); //1
 
-		for(Item item : itemList) { //2
-			SearchItem si = new SearchItem(item);
-			si.setImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0));
-			result.add(si);
-		}
-
-		return result;
+		return itemToSearchItem(itemList);
 	}
 
 	public List<SearchItem> getPurchaseList(String userId) {
@@ -44,17 +37,19 @@ public class MypageService {
 		List<Integer> itemIdxList = transRepository.findItemIdxByUserIdx(user.getUserIdx());
 		List<Item> itemList = itemRepository.findByItemIdxIn(itemIdxList);
 
-		List<SearchItem> result = new ArrayList<>(); //1
+		return itemToSearchItem(itemList);
+	}
 
-		for(Item item : itemList) { //2
+	public List<SearchItem> itemToSearchItem(List<Item> itemList) {
+		List<SearchItem> siList = new ArrayList<>();
+
+		for(Item item : itemList) {
 			SearchItem si = new SearchItem(item);
 			si.setImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0));
-			result.add(si);
+			siList.add(si);
 		}
-
-		// 1, 2번 코드 중복 없애기
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
 
-		return result;
+		return siList;
 	}
 }
