@@ -23,11 +23,11 @@ public class MypageService {
 	private final UserRepository userRepository;
 	private final TransactionRepository transRepository;
 
-	public List<SearchItem> getMainSaleList(String userId) {
-		User user = userRepository.findById(userId).get();
-		List<Item> itemList = itemRepository.findFirst3ByUser_UserIdxOrderByitemIdxDesc(user.getUserIdx());
-		return itemToSearchItem(itemList);
-	}
+//	public List<SearchItem> getMainSaleList(String userId) {
+//		User user = userRepository.findById(userId).get();
+//		List<Item> itemList = itemRepository.findFirst3ByUser_UserIdxOrderByitemIdxDesc(user.getUserIdx());
+//		return itemToSearchItem(itemList);
+//	}
 
 	public List<SearchItem> getSaleList(String userId) {
 		User user = userRepository.findById(userId).get();

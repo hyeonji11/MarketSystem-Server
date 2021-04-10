@@ -14,7 +14,7 @@ public interface ItemRepository extends JpaRepository<Item, Integer>{
 	@Override
 	Optional<Item> findById(Integer id);
 	List<Item> findAllByUser_UserIdx(@Param(value = "userIdx") int userIdx);
-	List<Item> findFirst3ByUser_UserIdxOrderByitemIdxDesc(@Param(value = "userIdx") int userIdx);
+//	List<Item> findFirst3ByUser_UserIdxOrderByitemIdxDesc(@Param(value = "userIdx") int userIdx);
 	List<Item> findByTitleContaining(String keyword);
 	List<Item> findByItemIdxIn(List<Integer> itemIdxList);
 }
