@@ -44,6 +44,8 @@ public class MypageServiceTest {
 	private User testUser;
 	private Item testItem;
 	private Image testImage;
+	List<Item> itemList;
+	List<Image> imageList;
 
 	@Before
 	public void setUp() {
@@ -68,14 +70,13 @@ public class MypageServiceTest {
 		testImage.setImageUrl("271de8ef-1634-41fc-a3e9-cee51eaf838b_강아지.jpg");
 		testImage.setImageOriName("강아지.jpg");
 
-	}
+		itemList = new ArrayList<>();
+		itemList.add(testItem);
 
-//	@After
-//	public void clear() {
-//		imageRepository.deleteAll();
-//		itemRepository.deleteAll();
-//		userRepository.deleteAll();
-//	}
+		imageList = new ArrayList<>();
+		imageList.add(testImage);
+
+	}
 
 	@Test
 	public void getSaleList_userId_itemList() {
@@ -87,12 +88,6 @@ public class MypageServiceTest {
 		Optional<User> testUser2 = Optional.of(testUser);
 		Mockito.when(userRepository.findById(userId))
 				.thenReturn(testUser2);
-
-		List<Item> itemList = new ArrayList<>();
-		itemList.add(testItem);
-
-		List<Image> imageList = new ArrayList<>();
-		imageList.add(testImage);
 
 		Mockito.when(itemRepository.findAllByUser_UserIdx(testUser.getUserIdx()))
 				.thenReturn(itemList);
@@ -131,12 +126,6 @@ public class MypageServiceTest {
 		List<Integer> itemIdxList = new ArrayList();
 		itemIdxList.add(testItem.getItemIdx());
 
-		List<Item> itemList = new ArrayList();
-		itemList.add(testItem);
-
-		List<Image> imageList = new ArrayList<>();
-		imageList.add(testImage);
-
 		Optional<User> user = Optional.of(testUser2);
 		Mockito.when(userRepository.findById(testUser2.getId()))
 				.thenReturn(user);
@@ -161,12 +150,6 @@ public class MypageServiceTest {
 	@Test
 	public void itemToSearchItem_itemList_searchItemList() {
 		//given
-		List<Item> itemList = new ArrayList<>();
-		itemList.add(testItem);
-
-		List<Image> imageList = new ArrayList<>();
-		imageList.add(testImage);
-
 		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
 				.thenReturn(imageList);
 
@@ -176,5 +159,32 @@ public class MypageServiceTest {
 		//then
 		assertThat(siList.get(0).itemIdx).isEqualTo(testItem.getItemIdx());
 		assertThat(siList.get(0).title).isEqualTo(testItem.getTitle());
+	}
+
+	@Test
+	public void getMainSaleList_userId_threeSaleList() {
+		//given
+		String userId = "id1";
+
+		testUser.setUserIdx(1);
+
+		Optional<User> testUser2 = Optional.of(testUser);
+		Mockito.when(userRepository.findById(userId))
+				.thenReturn(testUser2);
+
+		Mockito.when(itemRepository.findAllByUser_UserIdx(testUser.getUserIdx()))
+				.thenReturn(itemList);
+
+		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
+				.thenReturn(imageList);
+
+		//when
+		List<SearchItem> list = mypageService.getMainSaleList(userId);
+
+		//then
+		assertThat(list.size()).isLessThan(4);
+		assertThat(list.get(0).title).isEqualTo(testItem.getTitle());
+		assertThat(list.get(0).images).isEqualTo(testImage);
+
 	}
 }
