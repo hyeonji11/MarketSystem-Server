@@ -6,7 +6,6 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -19,10 +18,10 @@ public class ChatRoom {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int chatRoomIdx;
 
-	String name;
-
-	@Builder
-	public ChatRoom(String name) {
-		this.name = name;
-	}
+//	String name;
+//
+//	@Builder
+//	public ChatRoom(String name) {
+//		this.name = name;
+//	}
 }

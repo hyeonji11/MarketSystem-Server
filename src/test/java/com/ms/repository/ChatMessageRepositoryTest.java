@@ -62,13 +62,15 @@ public class ChatMessageRepositoryTest {
 				.phone("010-2222-2222")
 				.build();
 
-		chatRoom = ChatRoom.builder()
-				.name("itemTitle")
-				.build();
+//		chatRoom = ChatRoom.builder()
+//				.name("itemTitle")
+//				.build();
+		chatRoom = new ChatRoom();
 
-		ChatRoom chatRoom2 = ChatRoom.builder()
-				.name("itemTitle2")
-				.build();
+//		ChatRoom chatRoom2 = ChatRoom.builder()
+//				.name("itemTitle2")
+//				.build();
+		ChatRoom chatRoom2 = new ChatRoom();
 
 		userRepository.save(user);
 		//userRepository.save(user2);

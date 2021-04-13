@@ -58,7 +58,8 @@ public class ChatService {
 		User user1 = userRepository.findById(createDto.getUserIdx()).get();
 		User user2 = userRepository.findById(item.getUser().getUserIdx()).get();
 
-		ChatRoom chatRoom = ChatRoom.builder().name(item.getTitle()).build();
+		//ChatRoom chatRoom = ChatRoom.builder().name(item.getTitle()).build();
+		ChatRoom chatRoom = new ChatRoom();
 		chatRoomRepository.save(chatRoom);
 
 		ChatList cl = ChatList.builder()

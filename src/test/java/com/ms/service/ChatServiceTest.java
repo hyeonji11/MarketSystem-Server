@@ -151,9 +151,11 @@ public class ChatServiceTest {
 				.phone("010-3333-3333")
 				.build();
 
-		ChatRoom chatRoom = ChatRoom.builder()
-				.name("itemTitle")
-				.build();
+//		ChatRoom chatRoom = ChatRoom.builder()
+//				.name("itemTitle")
+//				.build();
+
+		ChatRoom chatRoom = new ChatRoom();
 
 		Optional<ChatRoom> testChatRoom = Optional.of(chatRoom);
 		Optional<User> testUser = Optional.of(user);
