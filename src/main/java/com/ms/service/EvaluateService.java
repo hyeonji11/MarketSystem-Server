@@ -1,5 +1,6 @@
 package com.ms.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -42,6 +43,16 @@ public class EvaluateService {
 		User user = userRepository.findById(userId).get();
 		double avg = evaluationRepository.getAverage(user.getUserIdx());
 		return avg;
+	}
+
+	public List<EvalResponseDto> getMypageEvalList(String userId) {
+		User user = userRepository.findById(userId).get();
+		List<EvalResponseDto> list = evaluationRepository.findAllByUserIdx(user.getUserIdx());
+		if(list.size() > 2) {
+			List<EvalResponseDto> newList = new ArrayList<>(list.subList(0, 2));
+			return newList;
+		}
+		return list;
 	}
 
 }

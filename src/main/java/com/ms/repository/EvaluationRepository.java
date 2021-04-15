@@ -11,7 +11,8 @@ import com.ms.dto.EvalResponseDto;
 public interface EvaluationRepository extends JpaRepository<Evaluation, Integer>{
 	@Query("SELECT new com.ms.dto.EvalResponseDto(e.rating, e.review) "
 			+ "FROM Evaluation e "
-			+ "WHERE e.user.userIdx = :userIdx")
+			+ "WHERE e.user.userIdx = :userIdx "
+			+ "ORDER BY e.evaluationIdx DESC")
 	List<EvalResponseDto> findAllByUserIdx(int userIdx);
 
 	@Query("SELECT AVG(e.rating) "

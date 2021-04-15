@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.dto.MypageListDto;
 import com.ms.interfaces.SearchItem;
+import com.ms.service.EvaluateService;
 import com.ms.service.MypageService;
 
 @RestController
@@ -18,10 +20,15 @@ import com.ms.service.MypageService;
 public class MypageController {
 
 	@Autowired MypageService mypageService;
+	@Autowired EvaluateService evalService;
 
-	@GetMapping("/")
+	@GetMapping("")
 	public ResponseEntity<?> mypageMain(@RequestParam String userId) {
-		return new ResponseEntity(HttpStatus.OK);
+		MypageListDto dto = new MypageListDto();
+		dto.setEvalList(evalService.getMypageEvalList(userId));
+		dto.setPurchaseList(mypageService.getMainPurchaseList(userId));
+		dto.setSaleList(mypageService.getMainSaleList(userId));
+		return new ResponseEntity(dto, HttpStatus.OK);
 	}
 
 	@GetMapping("/sale")

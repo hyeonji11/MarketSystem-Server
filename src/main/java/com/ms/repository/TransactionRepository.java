@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import com.ms.domain.Transaction;
 
 public interface TransactionRepository extends JpaRepository<Transaction, Integer> {
-	@Query(value="SELECT t.item.itemIdx FROM Transaction t WHERE t.user.userIdx = :userIdx")
+	@Query(value="SELECT t.item.itemIdx FROM Transaction t WHERE t.user.userIdx = :userIdx"
+			+ " ORDER BY t.transactionIdx DESC")
 	List<Integer> findItemIdxByUserIdx(int userIdx);
 }

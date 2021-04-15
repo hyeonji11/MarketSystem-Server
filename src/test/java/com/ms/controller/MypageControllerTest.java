@@ -1,12 +1,12 @@
 package com.ms.controller;
 
+import static org.hamcrest.CoreMatchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,10 +16,12 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import com.ms.domain.Evaluation;
 import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.domain.Transaction;
 import com.ms.domain.User;
+import com.ms.repository.EvaluationRepository;
 import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
 import com.ms.repository.TransactionRepository;
@@ -44,9 +46,12 @@ public class MypageControllerTest {
 	private TransactionRepository transRepository;
 
 	@Autowired
+	private EvaluationRepository evalRepository;
+
+	@Autowired
 	private MypageController mypageController;
 
-	private User user;
+	private User user2;
 	private Item testItem;
 	private Image testImage;
 
@@ -54,7 +59,7 @@ public class MypageControllerTest {
 	public void setUp() {
 		mockMvc = MockMvcBuilders.standaloneSetup(mypageController).build();
 
-		user = User.builder()
+		user2 = User.builder()
 				.id("id2")
 				.pw("pw2")
 				.name("사용자아ㅏ")
@@ -65,7 +70,7 @@ public class MypageControllerTest {
 		testItem = Item.builder()
 				.title("title")
 				.content("content")
-				.user(user)
+				.user(user2)
 				.charge("2000")
 				.build();
 
@@ -74,7 +79,7 @@ public class MypageControllerTest {
 		testImage.setImageUrl("271de8ef-1634-41fc-a3e9-cee51eaf838b_강아지.jpg");
 		testImage.setImageOriName("강아지.jpg");
 
-		userRepository.save(user);
+		userRepository.save(user2);
 		itemRepository.save(testItem);
 		imageRepository.save(testImage);
 	}
@@ -84,18 +89,56 @@ public class MypageControllerTest {
 		transRepository.deleteAll();
 		imageRepository.deleteAll();
 		itemRepository.deleteAll();
+		evalRepository.deleteAll();
 		userRepository.deleteAll();
 	}
 
-	@Ignore
 	@Test
-	public void mypageMain_whenUserId_returnList() throws Exception {
+	public void mypageMain_whenUserId_returnListDto() throws Exception {
 		//given
+//		User user2 = User.builder()
+//				.id("id22")
+//				.pw("pw22")
+//				.name("사용자22")
+//				.email("test22@daum.net")
+//				.phone("010-2222-2222")
+//				.build();
+
+		Transaction trans = Transaction.builder()
+				.state("판매완료")
+				.user(user2)
+				.item(testItem)
+				.build();
+
+		Evaluation eval = Evaluation.builder()
+				.user(user2)
+				.rating(3)
+				.review("좋음")
+				.build();
+		Evaluation eval2 = Evaluation.builder()
+				.user(user2)
+				.rating(4)
+				.review("친절합니다")
+				.build();
+		Evaluation eval3 = Evaluation.builder()
+				.user(user2)
+				.rating(2)
+				.review("약속 시간 늦음")
+				.build();
+
+		//userRepository.save(user2);
+		transRepository.save(trans);
+		evalRepository.save(eval);
+		evalRepository.save(eval2);
+		evalRepository.save(eval3);
 
 		//when&then
 		mockMvc.perform(get("/mypage")
-				.param("userId", user.getId()))
-				.andExpect(status().isOk());
+				.param("userId", user2.getId()))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.evalList.length()", is(2)))
+				.andExpect(jsonPath("$.saleList.length()", is(1)))
+				.andExpect(jsonPath("$.purchaseList.length()", is(1)));
 				//.andExpect(jsonPath("$.evalList[0]"))
 	}
 
@@ -105,7 +148,7 @@ public class MypageControllerTest {
 
 		//when&then
 		mockMvc.perform(get("/mypage/sale")
-				.param("userId", user.getId()))
+				.param("userId", user2.getId()))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.[0].title").value(testItem.getTitle()));
 
@@ -114,13 +157,13 @@ public class MypageControllerTest {
 	@Test
 	public void purchaseList_userId_purchaseListOfUser() throws Exception {
 		//given
-		User user2 = User.builder()
-				.id("id22")
-				.pw("pw22")
-				.name("사용자22")
-				.email("test22@daum.net")
-				.phone("010-2222-2222")
-				.build();
+//		User user2 = User.builder()
+//				.id("id22")
+//				.pw("pw22")
+//				.name("사용자22")
+//				.email("test22@daum.net")
+//				.phone("010-2222-2222")
+//				.build();
 
 		Transaction trans = Transaction.builder()
 				.state("판매완료")
@@ -128,7 +171,7 @@ public class MypageControllerTest {
 				.item(testItem)
 				.build();
 
-		userRepository.save(user2);
+		//userRepository.save(user2);
 		transRepository.save(trans);
 
 

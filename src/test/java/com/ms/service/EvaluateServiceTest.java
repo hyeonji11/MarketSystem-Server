@@ -1,5 +1,6 @@
 package com.ms.service;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 
@@ -136,4 +137,38 @@ public class EvaluateServiceTest {
 		verify(evalRepository).getAverage(userIdx);
 	}
 
+	@Test
+	public void getMypageEvalList_userId_EvalResponseDtoList() {
+		//given
+		String userId = "id1";
+		int userIdx = 1;
+		testUser.setUserIdx(userIdx);
+
+		Optional<User> user = Optional.of(testUser);
+
+		EvalResponseDto dto = new EvalResponseDto(3, "좋음");
+		EvalResponseDto dto2 = new EvalResponseDto(5, "매우좋음");
+		EvalResponseDto dto3 = new EvalResponseDto(2, "약속 늦음");
+		EvalResponseDto dto4 = new EvalResponseDto(4, "친절함");
+
+		List<EvalResponseDto> list = new ArrayList<>();
+		list.add(dto);
+		list.add(dto2);
+		list.add(dto3);
+		list.add(dto4);
+
+		Mockito.when(userRepository.findById(userId))
+				.thenReturn(user);
+
+		Mockito.when(evalRepository.findAllByUserIdx(userIdx))
+				.thenReturn(list);
+
+		//when
+		List<EvalResponseDto> res = evaluateService.getMypageEvalList(userId);
+
+		//then
+		verify(userRepository).findById(userId);
+		verify(evalRepository).findAllByUserIdx(userIdx);
+		assertThat(res.size()).isEqualTo(2);
+	}
 }

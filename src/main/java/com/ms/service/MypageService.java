@@ -23,11 +23,27 @@ public class MypageService {
 	private final UserRepository userRepository;
 	private final TransactionRepository transRepository;
 
-//	public List<SearchItem> getMainSaleList(String userId) {
-//		User user = userRepository.findById(userId).get();
-//		List<Item> itemList = itemRepository.findFirst3ByUser_UserIdxOrderByitemIdxDesc(user.getUserIdx());
-//		return itemToSearchItem(itemList);
-//	}
+	public List<SearchItem> getMainSaleList(String userId) {
+		User user = userRepository.findById(userId).get();
+		List<Item> itemList = itemRepository.findFirst3ByUser_UserIdxOrderByItemIdxDesc(user.getUserIdx());
+		return itemToSearchItem(itemList);
+	}
+
+	public List<SearchItem> getMainPurchaseList(String userId) {
+		User user = userRepository.findById(userId).get();
+
+		List<Integer> itemIdxList = transRepository.findItemIdxByUserIdx(user.getUserIdx());
+		List<Item> itemList;
+
+		if(itemIdxList.size() > 3) {
+			List<Integer> newList = new ArrayList<Integer>(itemIdxList.subList(0, 3));
+			itemList = itemRepository.findByItemIdxIn(itemIdxList);
+		} else {
+			itemList = itemRepository.findByItemIdxIn(itemIdxList);
+		}
+
+		return itemToSearchItem(itemList);
+	}
 
 	public List<SearchItem> getSaleList(String userId) {
 		User user = userRepository.findById(userId).get();
@@ -55,6 +71,7 @@ public class MypageService {
 			siList.add(si);
 		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
+		// 쿼리에 in 써서 하는 방법 상각해보기
 
 		return siList;
 	}

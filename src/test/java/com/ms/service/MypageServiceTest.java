@@ -2,6 +2,8 @@ package com.ms.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -172,19 +174,64 @@ public class MypageServiceTest {
 		Mockito.when(userRepository.findById(userId))
 				.thenReturn(testUser2);
 
-		Mockito.when(itemRepository.findAllByUser_UserIdx(testUser.getUserIdx()))
+		Mockito.when(itemRepository.findFirst3ByUser_UserIdxOrderByItemIdxDesc(testUser.getUserIdx()))
 				.thenReturn(itemList);
 
 		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
 				.thenReturn(imageList);
 
 		//when
-//		List<SearchItem> list = mypageService.getMainSaleList(userId);
-//
-//		//then
-//		assertThat(list.size()).isLessThan(4);
-//		assertThat(list.get(0).title).isEqualTo(testItem.getTitle());
-//		assertThat(list.get(0).images).isEqualTo(testImage);
+		List<SearchItem> list = mypageService.getMainSaleList(userId);
+
+		//then
+		assertThat(list.size()).isLessThan(4);
+		assertThat(list.get(0).title).isEqualTo(testItem.getTitle());
+		assertThat(list.get(0).images).isEqualTo(testImage);
+
+	}
+
+	@Test
+	public void getMainPurchaseList_userId_threePurchaseList() {
+		//given
+		User testUser2 = User.builder()
+				.id("id1")
+				.pw("pw1")
+				.name("사용자")
+				.email("test1111@naver.com")
+				.phone("010-1111-1111")
+				.build();
+
+		Transaction t = Transaction.builder()
+				.item(testItem)
+				.user(testUser2)
+				.state("판매완료")
+				.build();
+
+		testItem.setItemIdx(1);
+		testUser2.setUserIdx(2);
+		List<Integer> itemIdxList = new ArrayList();
+		itemIdxList.add(testItem.getItemIdx());
+
+		Optional<User> user = Optional.of(testUser2);
+		Mockito.when(userRepository.findById(testUser2.getId()))
+				.thenReturn(user);
+
+		Mockito.when(transRepository.findItemIdxByUserIdx(user.get().getUserIdx()))
+				.thenReturn(itemIdxList);
+
+		Mockito.when(itemRepository.findByItemIdxIn(itemIdxList))
+				.thenReturn(itemList);
+
+		Mockito.when(imageRepository.findAllByItem_ItemIdx(any(Integer.class)))
+				.thenReturn(imageList);
+
+		//when
+		List<SearchItem> list = mypageService.getPurchaseList(testUser2.getId());
+
+		//then
+		verify(itemRepository, times(1)).findByItemIdxIn(itemIdxList);
+		assertThat(list.get(0).charge).isEqualTo(testItem.getCharge());
+		assertThat(list.get(0).itemIdx).isEqualTo(testItem.getItemIdx());
 
 	}
 }
