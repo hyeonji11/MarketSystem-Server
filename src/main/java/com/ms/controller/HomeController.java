@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class HomeController {
 
-	//@Autowired UserService userService;
-
 	@RequestMapping("/")
 	public String main(String a) {
 		return a;
@@ -19,10 +17,4 @@ public class HomeController {
 		return "hello";
 	}
 
-//	@RequestMapping("/test")
-//	public ResponseEntity<?> test() {
-//		List<User> userList = userService.getUser();
-//
-//		return new ResponseEntity(userList.get(0).getId(), HttpStatus.OK);
-//	}
 }

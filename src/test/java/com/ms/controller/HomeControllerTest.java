@@ -41,4 +41,10 @@ public class HomeControllerTest {
 				.andExpect(content().string(hello));	//응답 본문 내용 검증. Controller에서 hello를 리턴하기 때문에 이 값이 맞는지 검증
 	}
 
+	@Test
+	public void main_itemList() throws Exception {
+		mvc.perform(get("/main"))
+			.andExpect(status().isOk());
+	}
+
 }

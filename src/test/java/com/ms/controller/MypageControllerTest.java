@@ -96,14 +96,6 @@ public class MypageControllerTest {
 	@Test
 	public void mypageMain_whenUserId_returnListDto() throws Exception {
 		//given
-//		User user2 = User.builder()
-//				.id("id22")
-//				.pw("pw22")
-//				.name("사용자22")
-//				.email("test22@daum.net")
-//				.phone("010-2222-2222")
-//				.build();
-
 		Transaction trans = Transaction.builder()
 				.state("판매완료")
 				.user(user2)
@@ -126,7 +118,6 @@ public class MypageControllerTest {
 				.review("약속 시간 늦음")
 				.build();
 
-		//userRepository.save(user2);
 		transRepository.save(trans);
 		evalRepository.save(eval);
 		evalRepository.save(eval2);
@@ -139,7 +130,6 @@ public class MypageControllerTest {
 				.andExpect(jsonPath("$.evalList.length()", is(2)))
 				.andExpect(jsonPath("$.saleList.length()", is(1)))
 				.andExpect(jsonPath("$.purchaseList.length()", is(1)));
-				//.andExpect(jsonPath("$.evalList[0]"))
 	}
 
 	@Test
@@ -157,13 +147,6 @@ public class MypageControllerTest {
 	@Test
 	public void purchaseList_userId_purchaseListOfUser() throws Exception {
 		//given
-//		User user2 = User.builder()
-//				.id("id22")
-//				.pw("pw22")
-//				.name("사용자22")
-//				.email("test22@daum.net")
-//				.phone("010-2222-2222")
-//				.build();
 
 		Transaction trans = Transaction.builder()
 				.state("판매완료")
@@ -171,9 +154,7 @@ public class MypageControllerTest {
 				.item(testItem)
 				.build();
 
-		//userRepository.save(user2);
 		transRepository.save(trans);
-
 
 		//when&then
 		mockMvc.perform(get("/mypage/purchase")
