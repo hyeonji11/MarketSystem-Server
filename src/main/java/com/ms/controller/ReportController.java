@@ -23,7 +23,7 @@ public class ReportController {
 	@PostMapping
 	public ResponseEntity<?> insertReport(@RequestBody ReportRequestDto reportDto) {
 		reportService.saveReport(reportDto);
-		return new ResponseEntity("sign up success", HttpStatus.OK);
+		return new ResponseEntity("success", HttpStatus.OK);
 	}
 
 	@GetMapping("/list")

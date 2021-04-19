@@ -74,9 +74,7 @@ public class UserController {
 		req.setPhone(user.getPhone());
 
 		User result = userService.signUpUser(req);
-		//String userId = userDetailsService.save(user);
 		UserResponse res = userService.userToResponse(result);
-		//UserDto dto = userService.userToDto(result);
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
 

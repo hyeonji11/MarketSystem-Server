@@ -23,7 +23,7 @@ public class EvaluateController {
 	@PostMapping
 	public ResponseEntity<?> insertEvaluation(@RequestBody EvalRequestDto dto) {
 		evalService.saveEvaluation(dto);
-		return new ResponseEntity(HttpStatus.OK);
+		return new ResponseEntity("평가 완료", HttpStatus.OK);
 	}
 
 	@GetMapping("/list")
