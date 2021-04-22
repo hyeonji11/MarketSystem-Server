@@ -3,6 +3,7 @@ package com.ms.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Builder;
@@ -20,10 +21,12 @@ public class ItemSaveRequestDto {
 	String charge;
 	boolean type;
 	LocalDateTime registrationDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	LocalDate returnDate;
 	MultipartFile[] images;
-	
-	
+
+
 	@Builder
 	public ItemSaveRequestDto(String title, String userId, String content, String charge,
 			boolean type, LocalDateTime registrationDate, LocalDate returnDate, MultipartFile[] images) {
@@ -36,5 +39,5 @@ public class ItemSaveRequestDto {
 		this.returnDate = returnDate;
 		this.images = images;
 		}
-	
+
 }

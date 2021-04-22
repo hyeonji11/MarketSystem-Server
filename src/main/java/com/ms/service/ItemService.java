@@ -59,8 +59,11 @@ public class ItemService {
 		item.setContent(itemSaveRequestDto.getContent());
 		item.setCharge(itemSaveRequestDto.getCharge());
 		item.setType(itemSaveRequestDto.isType());
-		item.setRegistrationDate(LocalDateTime.now());
-		item.setReturnDate(LocalDate.now().plusDays(7));
+		//item.setRegistrationDate(LocalDateTime.now());
+		item.setRegistrationDate(itemSaveRequestDto.getRegistrationDate());
+		if(itemSaveRequestDto.isType()) {
+			item.setReturnDate(itemSaveRequestDto.getReturnDate());
+		}
 
 		return item;
 	}
@@ -109,7 +112,8 @@ public class ItemService {
 			i.setItem(new Item());
 			i.getItem().setItemIdx(itemIdx);
 			i.setImageOriName(file.getOriginalFilename());
-			i.setImageUrl(savedName);
+			//i.setImageUrl(savedName);
+			i.setImageUrl(path.toString());
 
 			imageRepository.save(i);
 		}
