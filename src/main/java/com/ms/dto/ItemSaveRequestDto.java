@@ -20,6 +20,8 @@ public class ItemSaveRequestDto {
 	String content;
 	String charge;
 	boolean type;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	LocalDateTime registrationDate;
 
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
