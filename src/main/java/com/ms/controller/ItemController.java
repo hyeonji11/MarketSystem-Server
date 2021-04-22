@@ -18,13 +18,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.Item;
-import com.ms.domain.Report;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
-import com.ms.dto.ReportRequestDto;
 import com.ms.interfaces.ProjectItem;
 import com.ms.interfaces.SearchItem;
-import com.ms.repository.ReportRepository;
 import com.ms.service.ItemService;
 import com.ms.service.ReportService;
 import com.ms.service.UserService;
@@ -42,7 +39,7 @@ public class ItemController {
 	UserService userService;
 	@Autowired
 	ReportService reportService;
-	
+
 	// read list
 	@GetMapping("/list")
 	public List<SearchItem> item() {
@@ -67,7 +64,7 @@ public class ItemController {
 
 		return itemService.search(keyword);
 	}
-		
+
 	// create
 	@PostMapping("/save")
 	public ResponseEntity<?> save(@ModelAttribute ItemSaveRequestDto itemSaveRequestDto) {
@@ -77,7 +74,8 @@ public class ItemController {
 			try {
 				itemService.uploadImages(Arrays.asList(itemSaveRequestDto.getImages()), itemIdx);
 			} catch (IOException e) {
-				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+				e.printStackTrace();
+				return new ResponseEntity<>(e.getStackTrace(), HttpStatus.BAD_REQUEST);
 			}
 		}
 
@@ -107,6 +105,6 @@ public class ItemController {
 		itemService.delete(itemIdx);
 		return "success";
 	}
-	
+
 
 }
