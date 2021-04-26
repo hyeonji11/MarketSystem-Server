@@ -8,7 +8,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -69,12 +68,15 @@ public class ItemService {
 	}
 
 	public void uploadImages(List<MultipartFile> images, int itemIdx) throws IOException {
+		/*
 		Calendar cal = Calendar.getInstance();
 
 		int year = cal.get(Calendar.YEAR);
 		int month = cal.get(Calendar.MONTH) + 1;
 
 		String folder = "/" + year + "/" + month + "/"; // '년/월'로 폴더 경로 지정
+		*/
+		String folder = "/home/ec2-user/uploads/";	//ec2 서버에서 권한문제로 home에 업로드해야됨
 		System.out.println(folder);
 		File newfile = new File(folder);
 
@@ -106,7 +108,7 @@ public class ItemService {
 			byte[] bytes = file.getBytes();
 			Path path = Paths.get(folder + savedName);
 			System.out.println("path: " + path);
-			Files.write(path, bytes);
+			Files.write(path, bytes);	//여기서 에러(window O, linux X)
 
 			Image i = new Image();
 			i.setItem(new Item());
