@@ -1,6 +1,9 @@
 package com.ms.service;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -121,6 +124,33 @@ public class ItemService {
 		}
 	}
 
+	public byte[] getImage(String fileDir) throws IOException {
+		FileInputStream fis = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        try{
+            fis = new FileInputStream(fileDir);
+        } catch(FileNotFoundException e){
+            e.printStackTrace();
+        }
+
+        int readCount = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+
+        try{
+            while((readCount = fis.read(buffer)) != -1){
+                baos.write(buffer, 0, readCount);
+            }
+            fileArray = baos.toByteArray();
+            fis.close();
+            baos.close();
+        } catch(IOException e){
+            throw new RuntimeException("File Error");
+        }
+        return fileArray;
+	}
+
 	public List<SearchItem> findAll() {
 		List<Item> itemList = itemRepository.findAll();
 
@@ -133,7 +163,12 @@ public class ItemService {
 			SearchItem searchItem = new SearchItem(item);
 			if (imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).size() != 0) {
 				Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
-				searchItem.setImage(image);
+				//searchItem.setImage(image);
+				try {
+					searchItem.setImage(getImage(image.getImageUrl()));
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			searchItemList.add(searchItem);
@@ -188,8 +223,12 @@ public class ItemService {
 			Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
 
 			SearchItem searchItem = new SearchItem(item);
-			searchItem.setImage(image);
-
+			//searchItem.setImage(image);
+			try {
+				searchItem.setImage(getImage(image.getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			searchItemList.add(searchItem);
 
 		}

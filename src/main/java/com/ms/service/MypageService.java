@@ -1,8 +1,10 @@
 package com.ms.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.Item;
@@ -22,6 +24,8 @@ public class MypageService {
 	private final ImageRepository imageRepository;
 	private final UserRepository userRepository;
 	private final TransactionRepository transRepository;
+
+	@Autowired ItemService itemService;
 
 	public List<SearchItem> getMainSaleList(String userId) {
 		User user = userRepository.findById(userId).get();
@@ -67,7 +71,12 @@ public class MypageService {
 
 		for(Item item : itemList) {
 			SearchItem si = new SearchItem(item);
-			si.setImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0));
+			try {
+				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//si.setImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0));
 			siList.add(si);
 		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
