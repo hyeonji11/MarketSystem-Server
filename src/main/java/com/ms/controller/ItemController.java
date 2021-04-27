@@ -10,7 +10,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -39,37 +38,7 @@ public class ItemController {
 	UserService userService;
 	@Autowired
 	ReportService reportService;
-/*
-	@GetMapping(value="/image/test", produces=MediaType.IMAGE_JPEG_VALUE)
-	public @ResponseBody byte[] getImage() throws IOException {
-		FileInputStream fis = null;
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        String fileDir = "/home/ec2-user/uploads/9b633ffd-fdaf-46ed-9416-00695d7da219_마우스.jpg"; // 파일경로
-
-        try{
-            fis = new FileInputStream(fileDir);
-        } catch(FileNotFoundException e){
-            e.printStackTrace();
-        }
-
-        int readCount = 0;
-        byte[] buffer = new byte[1024];
-        byte[] fileArray = null;
-
-        try{
-            while((readCount = fis.read(buffer)) != -1){
-                baos.write(buffer, 0, readCount);
-            }
-            fileArray = baos.toByteArray();
-            fis.close();
-            baos.close();
-        } catch(IOException e){
-            throw new RuntimeException("File Error");
-        }
-        return fileArray;
-	}
-*/
 	// read list
 	@GetMapping("/list")
 	public List<SearchItem> item() {
@@ -78,8 +47,8 @@ public class ItemController {
 	}
 
 	// read one
-	@GetMapping("/{itemIdx}")
-	public ProjectItem item(@PathVariable("itemIdx") int itemIdx) {
+	@GetMapping()
+	public ProjectItem item(@RequestParam(value = "itemIdx") int itemIdx) {
 		Item item = itemService.findById(itemIdx).get();
 
 		ProjectItem projectItem = new ProjectItem(item);
@@ -113,8 +82,8 @@ public class ItemController {
 	}
 
 	// update
-	@PutMapping("/{itemIdx}")
-	public ResponseEntity<?> update(@PathVariable int itemIdx,
+	@PutMapping()
+	public ResponseEntity<?> update(@RequestParam(value = "itemIdx") int itemIdx,
 			@ModelAttribute ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
 		itemService.update(itemIdx, itemUpdateRequestDto);
 
@@ -130,8 +99,8 @@ public class ItemController {
 	}
 
 	// delete
-	@DeleteMapping("/{itemIdx}")
-	public String delete(@PathVariable int itemIdx) {
+	@DeleteMapping()
+	public String delete(@RequestParam(value = "itemIdx") int itemIdx) {
 		itemService.delete(itemIdx);
 		return "success";
 	}

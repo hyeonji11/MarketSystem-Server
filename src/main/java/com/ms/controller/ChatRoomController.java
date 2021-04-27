@@ -4,7 +4,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,7 +36,7 @@ public class ChatRoomController {
 
 	//특정 채팅방 입장
 	@GetMapping("/room/{chatRoomIdx}")
-	public ResponseEntity<?> roomDetail(@PathVariable int chatRoomIdx) {
+	public ResponseEntity<?> roomDetail(@RequestParam(value = "chatRoomIdx") int chatRoomIdx) {
 		return new ResponseEntity(chatService.getChatMessages(chatRoomIdx), HttpStatus.OK);
 	}
 
