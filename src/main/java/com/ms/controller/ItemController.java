@@ -1,6 +1,7 @@
 package com.ms.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
@@ -52,7 +54,16 @@ public class ItemController {
 		Item item = itemService.findById(itemIdx).get();
 
 		ProjectItem projectItem = new ProjectItem(item);
-		projectItem.setImageList(itemService.callImages(itemIdx));
+		List<Image> imageList = itemService.callImages(itemIdx);
+		List<byte[]> imageDirList = new ArrayList();
+		for(Image image: imageList) {
+			try {
+				imageDirList.add(itemService.getImage(image.getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		projectItem.setImageList(imageDirList);
 
 		return projectItem;
 	}

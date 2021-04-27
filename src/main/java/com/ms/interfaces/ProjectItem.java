@@ -4,11 +4,10 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import com.ms.domain.Image;
 import com.ms.domain.Item;
 
 public class ProjectItem {
-	
+
 	public int itemIdx;
 	public int userIdx;
 	public String title;
@@ -17,12 +16,12 @@ public class ProjectItem {
 	public boolean type;
 	public LocalDateTime registrationDate;
 	public LocalDate returnDate;
-	public List<Image> imageList;
+	public List<byte[]> imageList;
 
-	public void setImageList(List<Image> imageList) {
+	public void setImageList(List<byte[]> imageList) {
 		this.imageList = imageList;
 	}
-	
+
 	public ProjectItem(Item item) {
 		this.itemIdx = item.getItemIdx();
 		this.userIdx = item.getUser().getUserIdx();
