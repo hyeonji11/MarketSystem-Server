@@ -1,5 +1,6 @@
 package com.ms.service;
 
+import java.io.IOException;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -16,9 +17,10 @@ import com.ms.domain.User;
 import com.ms.dto.ChatCreateRequestDto;
 import com.ms.dto.ChatMessageDto;
 import com.ms.dto.ChatMessageResponseDto;
-import com.ms.interfaces.SearchItem;
+import com.ms.dto.ChatRoomResponseDto;
 import com.ms.repository.ChatMessageRepository;
 import com.ms.repository.ChatRoomRepository;
+import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
 import com.ms.repository.UserRepository;
 
@@ -31,19 +33,29 @@ public class ChatService {
 	private final ChatRoomRepository chatRoomRepository;
 	private final ChatMessageRepository chatMessageRepository;
 	private final ItemRepository itemRepository;
+	private final ImageRepository imageRepository;
 	private final UserRepository userRepository;
 
 	@Autowired MypageService mypageService;
+	@Autowired ItemService itemService;
 
-	public List<SearchItem> findAllRoom(int userIdx) {
+	public List<ChatRoomResponseDto> findAllRoom(int userIdx) {
 		List<ChatRoom> roomList = chatRoomRepository.findByUserIdx(userIdx);
-		List<Item> itemList = new ArrayList();
-		for(ChatRoom cr : roomList) {
-			itemList.add(cr.getItem());
+		List<ChatRoomResponseDto> crList = new ArrayList<>();
+
+		for(ChatRoom cr: roomList) {
+			ChatRoomResponseDto crDto = new ChatRoomResponseDto(cr.getItem());
+			crDto.setChatRoomIdx(cr.getChatRoomIdx());
+			try {
+				crDto.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(cr.getItem().getItemIdx()).get(0).getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			crList.add(crDto);
 		}
-		List<SearchItem> si = mypageService.itemToSearchItem(itemList);
-		Collections.reverse(si);
-		return si;
+
+		Collections.reverse(crList);
+		return crList;
 	}
 
 	public List<ChatMessageResponseDto> getChatMessages(int chatRoomIdx) {

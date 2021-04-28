@@ -25,7 +25,6 @@ import com.ms.domain.User;
 import com.ms.dto.ChatCreateRequestDto;
 import com.ms.dto.ChatMessageDto;
 import com.ms.dto.ChatMessageResponseDto;
-import com.ms.dto.ChatRoomResponseDto;
 import com.ms.repository.ChatMessageRepository;
 import com.ms.repository.ChatRoomRepository;
 import com.ms.repository.ItemRepository;
@@ -58,20 +57,21 @@ public class ChatServiceTest {
 	public void findAllRoom_userIdx_returnUserChatRoom() {
 		//given
 		int userIdx = 1;
-
+		/*
 		ChatRoomResponseDto dto = new ChatRoomResponseDto(1, 1, "사용자1");
 
 		List<ChatRoomResponseDto> list = new ArrayList<>();
 		list.add(dto);
 
-		//Mockito.when(chatListRepository.findUserByChatRoom(userIdx))
-		//		.thenReturn(list);
+		Mockito.when(chatListRepository.findUserByChatRoom(userIdx))
+				.thenReturn(list);
 
 		//when
-		//List<ChatRoomResponseDto> chatRoomList = chatService.findAllRoom(userIdx);
+		List<ChatRoomResponseDto> chatRoomList = chatService.findAllRoom(userIdx);
 
 		//then
-		//assertThat(chatRoomList.size()).isEqualTo(1);
+		assertThat(chatRoomList.size()).isEqualTo(1);
+		*/
 	}
 
 	@Test

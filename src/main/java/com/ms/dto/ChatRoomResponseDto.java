@@ -1,5 +1,7 @@
 package com.ms.dto;
 
+import com.ms.domain.Item;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,8 +11,15 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ChatRoomResponseDto {
 
-	private int chatRoomIdx;
-	private int userIdx; //채팅 상대방 idx
-	private String name; //채팅 상대방 이름
+	int chatRoomIdx;
+	int itemIdx;
+	String title;
+	String charge;
+	byte[] image;
 
+	public ChatRoomResponseDto(Item item) {
+		this.itemIdx = item.getItemIdx();
+		this.title = item.getTitle();
+		this.charge = item.getCharge();
+	}
 }
