@@ -25,13 +25,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.ms.domain.ChatList;
 import com.ms.domain.ChatMessage;
 import com.ms.domain.ChatRoom;
 import com.ms.domain.Item;
 import com.ms.domain.User;
 import com.ms.dto.ChatCreateRequestDto;
-import com.ms.repository.ChatListRepository;
 import com.ms.repository.ChatMessageRepository;
 import com.ms.repository.ChatRoomRepository;
 import com.ms.repository.ItemRepository;
@@ -57,14 +55,12 @@ public class ChatRoomControllerTest {
 	private ChatRoomRepository chatRoomRepository;
 
 	@Autowired
-	private ChatListRepository chatListRepository;
-
-	@Autowired
 	private ChatMessageRepository chatMessageRepository;
 
 	private User user;
 	private User user2;
 	private ChatRoom chatRoom;
+	private Item item;
 
 	@Before
 	public void setUp() {
@@ -86,31 +82,28 @@ public class ChatRoomControllerTest {
 				.phone("010-2222-2222")
 				.build();
 
-//		chatRoom = ChatRoom.builder()
-//				.name("itemTitle")
-//				.build();
-		chatRoom = new ChatRoom();
+		item = Item.builder()
+				.title("title")
+				.charge("1000")
+				.content("content")
+				.user(user)
+				.type(true)
+				.build();
+
+		chatRoom = ChatRoom.builder()
+				.item(item)
+				.user(user2)
+				.build();
 
 		userRepository.save(user);
 		userRepository.save(user2);
 
 		chatRoomRepository.save(chatRoom);
 
-		chatListRepository.save(ChatList.builder()
-				.user(user)
-				.chatRoom(chatRoom)
-				.build());
-
-		chatListRepository.save(ChatList.builder()
-				.user(user2)
-				.chatRoom(chatRoom)
-				.build());
-
 	}
 
 	@After
 	public void tearDown() {
-		chatListRepository.deleteAll();
 		chatMessageRepository.deleteAll();
 		chatRoomRepository.deleteAll();
 		itemRepository.deleteAll();
@@ -151,9 +144,6 @@ public class ChatRoomControllerTest {
 
 		List<ChatRoom> chatRoomList = chatRoomRepository.findAll();
 		assertThat(chatRoomList.size()).isEqualTo(2);
-
-		List<ChatList> chatList = chatListRepository.findAll();
-		assertThat(chatList.size()).isEqualTo(4);
 	}
 
 	@Test

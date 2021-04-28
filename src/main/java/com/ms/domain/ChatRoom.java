@@ -4,8 +4,11 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -18,10 +21,18 @@ public class ChatRoom {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	int chatRoomIdx;
 
-//	String name;
-//
-//	@Builder
-//	public ChatRoom(String name) {
-//		this.name = name;
-//	}
+	@ManyToOne
+	@JoinColumn(name = "itemIdx")
+	Item item;
+
+	@ManyToOne
+	@JoinColumn(name = "userIdx")
+	User user;
+
+	@Builder
+    public ChatRoom(Item item, User user) {
+        this.item = item;
+        this.user = user;
+    }
+
 }
