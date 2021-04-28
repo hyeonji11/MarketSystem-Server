@@ -44,7 +44,7 @@ public class ChatService {
 		List<ChatRoomResponseDto> crList = new ArrayList<>();
 
 		for(ChatRoom cr: roomList) {
-			ChatRoomResponseDto crDto = new ChatRoomResponseDto(cr.getItem());
+			ChatRoomResponseDto crDto = new ChatRoomResponseDto(cr.getItem().getItemIdx(), cr.getItem().getTitle(), cr.getItem().getCharge());
 			crDto.setChatRoomIdx(cr.getChatRoomIdx());
 			try {
 				crDto.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(cr.getItem().getItemIdx()).get(0).getImageUrl()));
