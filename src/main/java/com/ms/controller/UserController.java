@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.ms.config.JwtTokenUtil;
 import com.ms.domain.User;
+import com.ms.dto.JwtResponse;
 import com.ms.dto.UserDto;
 import com.ms.dto.UserResponse;
 import com.ms.service.JwtUserDetailsService;
@@ -24,6 +26,15 @@ public class UserController {
 
 	@Autowired UserService userService;
 	@Autowired JwtUserDetailsService userDetailsService;
+	@Autowired JwtTokenUtil jwtTokenUtil;
+
+	@GetMapping("/info")
+	public ResponseEntity<?> getInfo(@RequestParam String token) {
+		String userId = jwtTokenUtil.getUsernameFromToken(token);
+		User user = userService.getUserOne(userId);
+		JwtResponse jwtResponse = new JwtResponse(token, user.getUserIdx(), user.getId(), user.getName());
+		return new ResponseEntity(jwtResponse, HttpStatus.OK);
+	}
 
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(@RequestBody UserDto user) {
