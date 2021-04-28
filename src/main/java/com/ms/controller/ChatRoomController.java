@@ -33,7 +33,7 @@ public class ChatRoomController {
 	}
 
 	//특정 채팅방 입장
-	@GetMapping("/room/{chatRoomIdx}")
+	@GetMapping("/room")
 	public ResponseEntity<?> roomDetail(@RequestParam(value = "chatRoomIdx") int chatRoomIdx) {
 		return new ResponseEntity(chatService.getChatMessages(chatRoomIdx), HttpStatus.OK);
 	}
