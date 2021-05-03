@@ -56,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				//.cors().and()
 				.cors().and()
 				.formLogin().disable()
-				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw","/hello").permitAll().
+				.authorizeRequests().requestMatchers(CorsUtils::isPreFlightRequest).permitAll().antMatchers("/login","/user/signup", "/user/findid", "/user/findpw","/hello", "/ws-stomp/**", "/sub/**", "/pub/**").permitAll().
 				anyRequest().authenticated()
 				.and()
 				.exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
