@@ -4,7 +4,9 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 
+import com.ms.domain.ChatMessage;
 import com.ms.dto.ChatMessageDto;
+import com.ms.dto.ChatMessageResponseDto;
 import com.ms.service.ChatService;
 
 import lombok.RequiredArgsConstructor;
@@ -21,8 +23,8 @@ public class ChatController {
 	public void message(ChatMessageDto message) {
 //		if(message.getType().equals("ENTER"))
 //			message.setMessage(message.getUserIdx()+"님이 입장하셨습니다.");
-		chatService.insertChatMessage(message);
-		messagingTemplate.convertAndSend("/sub/chat/room/"+message.getChatRoomIdx(), message);
+		ChatMessage cm = chatService.insertChatMessage(message);
+		messagingTemplate.convertAndSend("/sub/chat/room/"+message.getChatRoomIdx(), new ChatMessageResponseDto(message.getMessage(), cm.getSendTime().toLocalDateTime(), message.getUserIdx(), message.getChatRoomIdx()));
 	}
 
 }
