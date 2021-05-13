@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -21,6 +22,7 @@ import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
+import com.ms.dto.TransactionRequestDto;
 import com.ms.interfaces.ProjectItem;
 import com.ms.interfaces.SearchItem;
 import com.ms.service.ItemService;
@@ -126,8 +128,9 @@ public class ItemController {
 	}
 
 	@PostMapping("/trans")
-	public ResponseEntity<?> transactionComplete(Integer chatRoomIdx) {
-		transService.transactionSave(chatRoomIdx);
+	public ResponseEntity<?> transactionComplete(@RequestBody TransactionRequestDto dto) {
+		System.out.println("chatRoomIdx11: "+dto.getChatRoomIdx());
+		transService.transactionSave(dto.getChatRoomIdx());
 		return new ResponseEntity("거래가 완료되었습니다.", HttpStatus.OK);
 	}
 
