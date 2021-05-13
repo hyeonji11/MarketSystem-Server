@@ -16,7 +16,7 @@ public class TransactionService {
 	private final ChatRoomRepository crRepository;
 
 	public void transactionSave(int chatRoomIdx) {
-		ChatRoom chatRoom = crRepository.findByChatRoomIdx(chatRoomIdx);
+		ChatRoom chatRoom = crRepository.findByChatRoomIdx(chatRoomIdx).get();
 
 		Transaction trans = Transaction.builder()
 				.state("거래완료")
