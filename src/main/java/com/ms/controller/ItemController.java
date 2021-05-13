@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ import com.ms.interfaces.ProjectItem;
 import com.ms.interfaces.SearchItem;
 import com.ms.service.ItemService;
 import com.ms.service.ReportService;
+import com.ms.service.TransactionService;
 import com.ms.service.UserService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -40,6 +42,8 @@ public class ItemController {
 	UserService userService;
 	@Autowired
 	ReportService reportService;
+	@Autowired
+	TransactionService transService;
 
 	// read list
 	@GetMapping("/list")
@@ -106,15 +110,26 @@ public class ItemController {
 			}
 		}
 
-		return new ResponseEntity("Successfully uploaded!", HttpStatus.OK);
+		return new ResponseEntity("수정되었습니다.", HttpStatus.OK);
 	}
 
 	// delete
 	@DeleteMapping()
-	public String delete(@RequestParam(value = "itemIdx") int itemIdx) {
+	public ResponseEntity<?> delete(@RequestParam(value = "itemIdx") int itemIdx) {
 		itemService.delete(itemIdx);
-		return "success";
+		return new ResponseEntity("삭제되었습니다.", HttpStatus.OK);
 	}
 
+	@GetMapping("/userId")
+	public ResponseEntity<?> getItemUserId(@RequestParam(value = "itemIdx") int itemIdx) {
+		Item item = itemService.findById(itemIdx).get();
+		return new ResponseEntity(item.getUser().getId(), HttpStatus.OK);
+	}
+
+	@PostMapping("/trans")
+	public ResponseEntity<?> transactionComplete(@RequestBody int chatRoomIdx) {
+		transService.transactionSave(chatRoomIdx);
+		return new ResponseEntity("거래가 완료되었습니다.", HttpStatus.OK);
+	}
 
 }

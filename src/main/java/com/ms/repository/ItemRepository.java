@@ -17,4 +17,5 @@ public interface ItemRepository extends JpaRepository<Item, Integer>{
 	List<Item> findFirst3ByUser_UserIdxOrderByItemIdxDesc(@Param(value = "userIdx") int userIdx);
 	List<Item> findByTitleContaining(String keyword);
 	List<Item> findByItemIdxIn(List<Integer> itemIdxList);
+	Item findByItemIdx(int itemIdx);
 }
