@@ -36,6 +36,11 @@ public class UserController {
 		return new ResponseEntity(jwtResponse, HttpStatus.OK);
 	}
 
+	@GetMapping("/name")
+	public ResponseEntity<?> getUserOne(@RequestParam Integer userIdx) {
+		return new ResponseEntity(userService.getUserInfo(userIdx), HttpStatus.OK);
+	}
+
 	@PostMapping("/signup")
 	public ResponseEntity<?> signUp(@RequestBody UserDto user) {
 		userDetailsService.save(user);

@@ -76,7 +76,6 @@ public class MypageService {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			//si.setImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0));
 			siList.add(si);
 		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기

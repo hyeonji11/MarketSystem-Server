@@ -46,6 +46,10 @@ public class UserService {
 		return user;
 	}
 
+	public UserResponse getUserInfo(int userIdx) {
+		return userToResponse(userRepository.findById(userIdx).get());
+	}
+
 	public UserDto userToDto(User user) {
 		UserDto userDto = UserDto.builder()
 				.id(user.getId())

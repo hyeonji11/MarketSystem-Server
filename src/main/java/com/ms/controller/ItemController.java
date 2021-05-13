@@ -129,7 +129,6 @@ public class ItemController {
 
 	@PostMapping("/trans")
 	public ResponseEntity<?> transactionComplete(@RequestBody TransactionRequestDto dto) {
-		System.out.println("chatRoomIdx11: "+dto.getChatRoomIdx());
 		transService.transactionSave(dto.getChatRoomIdx());
 		return new ResponseEntity("거래가 완료되었습니다.", HttpStatus.OK);
 	}
