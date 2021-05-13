@@ -127,7 +127,7 @@ public class ItemController {
 	}
 
 	@PostMapping("/trans")
-	public ResponseEntity<?> transactionComplete(@RequestBody int chatRoomIdx) {
+	public ResponseEntity<?> transactionComplete(@RequestBody Integer chatRoomIdx) {
 		transService.transactionSave(chatRoomIdx);
 		return new ResponseEntity("거래가 완료되었습니다.", HttpStatus.OK);
 	}
