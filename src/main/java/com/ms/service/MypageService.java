@@ -1,5 +1,6 @@
 package com.ms.service;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,11 +71,11 @@ public class MypageService {
 
 		for(Item item : itemList) {
 			SearchItem si = new SearchItem(item);
-//			try {
-//				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			siList.add(si);
 		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
