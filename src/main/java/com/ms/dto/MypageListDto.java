@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 public class MypageListDto {
+	UserResponse userDto;
 	List<EvalResponseDto> evalList;
 	List<SearchItem> saleList;
 	List<SearchItem> purchaseList;

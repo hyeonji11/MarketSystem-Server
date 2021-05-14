@@ -45,8 +45,8 @@ public class EvaluateService {
 		return avg;
 	}
 
-	public List<EvalResponseDto> getMypageEvalList(String userId) {
-		User user = userRepository.findById(userId).get();
+	public List<EvalResponseDto> getMypageEvalList(int userIdx) {
+		User user = userRepository.findById(userIdx).get();
 		List<EvalResponseDto> list = evaluationRepository.findAllByUserIdx(user.getUserIdx());
 		if(list.size() > 2) {
 			List<EvalResponseDto> newList = new ArrayList<>(list.subList(0, 2));

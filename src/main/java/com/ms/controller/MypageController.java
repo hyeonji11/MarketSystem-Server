@@ -14,6 +14,7 @@ import com.ms.dto.MypageListDto;
 import com.ms.interfaces.SearchItem;
 import com.ms.service.EvaluateService;
 import com.ms.service.MypageService;
+import com.ms.service.UserService;
 
 @RestController
 @RequestMapping("/mypage")
@@ -21,13 +22,15 @@ public class MypageController {
 
 	@Autowired MypageService mypageService;
 	@Autowired EvaluateService evalService;
+	@Autowired UserService userService;
 
 	@GetMapping("")
-	public ResponseEntity<?> mypageMain(@RequestParam String userId) {
+	public ResponseEntity<?> mypageMain(@RequestParam Integer userIdx) {
 		MypageListDto dto = new MypageListDto();
-		dto.setEvalList(evalService.getMypageEvalList(userId));
-		dto.setPurchaseList(mypageService.getMainPurchaseList(userId));
-		dto.setSaleList(mypageService.getMainSaleList(userId));
+		dto.setEvalList(evalService.getMypageEvalList(userIdx));
+		dto.setPurchaseList(mypageService.getMainPurchaseList(userIdx));
+		dto.setSaleList(mypageService.getMainSaleList(userIdx));
+		dto.setUserDto(userService.getUserInfo(userIdx));
 		return new ResponseEntity(dto, HttpStatus.OK);
 	}
 

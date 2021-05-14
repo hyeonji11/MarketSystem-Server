@@ -181,7 +181,7 @@ public class MypageServiceTest {
 				.thenReturn(imageList);
 
 		//when
-		List<SearchItem> list = mypageService.getMainSaleList(userId);
+		List<SearchItem> list = mypageService.getMainSaleList(testUser.getUserIdx());
 
 		//then
 		assertThat(list.size()).isLessThan(4);

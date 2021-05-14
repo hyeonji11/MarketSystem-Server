@@ -164,7 +164,7 @@ public class EvaluateServiceTest {
 				.thenReturn(list);
 
 		//when
-		List<EvalResponseDto> res = evaluateService.getMypageEvalList(userId);
+		List<EvalResponseDto> res = evaluateService.getMypageEvalList(userIdx);
 
 		//then
 		verify(userRepository).findById(userId);

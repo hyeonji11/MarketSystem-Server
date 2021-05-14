@@ -1,6 +1,5 @@
 package com.ms.service;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,14 +26,14 @@ public class MypageService {
 
 	@Autowired ItemService itemService;
 
-	public List<SearchItem> getMainSaleList(String userId) {
-		User user = userRepository.findById(userId).get();
+	public List<SearchItem> getMainSaleList(int userIdx) {
+		User user = userRepository.findById(userIdx).get();
 		List<Item> itemList = itemRepository.findFirst3ByUser_UserIdxOrderByItemIdxDesc(user.getUserIdx());
 		return itemToSearchItem(itemList);
 	}
 
-	public List<SearchItem> getMainPurchaseList(String userId) {
-		User user = userRepository.findById(userId).get();
+	public List<SearchItem> getMainPurchaseList(int userIdx) {
+		User user = userRepository.findById(userIdx).get();
 
 		List<Integer> itemIdxList = transRepository.findItemIdxByUserIdx(user.getUserIdx());
 		List<Item> itemList;
@@ -71,11 +70,11 @@ public class MypageService {
 
 		for(Item item : itemList) {
 			SearchItem si = new SearchItem(item);
-			try {
-				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+//			try {
+//				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
 			siList.add(si);
 		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
