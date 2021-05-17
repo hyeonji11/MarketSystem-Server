@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.Item;
+import com.ms.domain.Transaction;
 import com.ms.domain.User;
+import com.ms.dto.SaleItemDto;
 import com.ms.interfaces.SearchItem;
 import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
@@ -49,12 +51,39 @@ public class MypageService {
 		return itemToSearchItem(itemList);
 	}
 
-	public List<SearchItem> getSaleList(int userIdx) {
-		//User user = userRepository.findById(userIdx).get();
-
+	public List<SaleItemDto> getSaleList(int userIdx) {
 		List<Item> itemList = itemRepository.findAllByUser_UserIdx(userIdx);
+		List<Integer> itemIdxList = new ArrayList<Integer>();
+		for(Item item : itemList) {
+			itemIdxList.add(item.getItemIdx());
+		}
+		List<Transaction> transList = transRepository.findByItem_ItemIdxIn(itemIdxList);
+		//transactionRepository에서 itemIdxList로 stateList 가져오는 코드
 
-		return itemToSearchItem(itemList);
+		return itemToSaleItemList(itemList, transList);
+	}
+
+	public List<SaleItemDto> itemToSaleItemList(List<Item> itemList, List<Transaction> transList) {
+		List<SaleItemDto> sdList = new ArrayList<>();
+
+		for(int i=0; i<itemList.size(); i++) {
+			SaleItemDto sd = new SaleItemDto(itemList.get(i));
+//			try {
+//				sd.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(itemList.get(i).getItemIdx()).get(0).getImageUrl()));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+			for(int j=0; j<transList.size(); j++) {
+				if(itemList.get(i).getItemIdx() == transList.get(j).getItem().getItemIdx()) {
+					sd.setState(transList.get(j).getState());
+					transList.remove(j);
+					break;
+				}
+			}
+			sdList.add(sd);
+		}
+
+		return sdList;
 	}
 
 	public List<SearchItem> getPurchaseList(String userId) {

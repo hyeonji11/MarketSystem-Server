@@ -20,6 +20,7 @@ import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.domain.Transaction;
 import com.ms.domain.User;
+import com.ms.dto.SaleItemDto;
 import com.ms.interfaces.SearchItem;
 import com.ms.repository.ImageRepository;
 import com.ms.repository.ItemRepository;
@@ -98,7 +99,7 @@ public class MypageServiceTest {
 				.thenReturn(imageList);
 
 		//when
-		List<SearchItem> list = mypageService.getSaleList(1);
+		List<SaleItemDto> list = mypageService.getSaleList(1);
 
 		//then
 		assertThat(list.get(0).title).isEqualTo(testItem.getTitle());

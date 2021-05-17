@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.dto.MypageListDto;
+import com.ms.dto.SaleItemDto;
 import com.ms.interfaces.SearchItem;
 import com.ms.service.EvaluateService;
 import com.ms.service.MypageService;
@@ -36,7 +37,7 @@ public class MypageController {
 
 	@GetMapping("/sale")
 	public ResponseEntity<?> saleList(@RequestParam Integer userIdx) {
-		List<SearchItem> saleList = mypageService.getSaleList(userIdx);
+		List<SaleItemDto> saleList = mypageService.getSaleList(userIdx);
 		return new ResponseEntity(saleList, HttpStatus.OK);
 	}
 
