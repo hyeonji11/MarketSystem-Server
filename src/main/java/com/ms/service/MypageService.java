@@ -68,11 +68,11 @@ public class MypageService {
 
 		for(int i=0; i<itemList.size(); i++) {
 			SaleItemDto sd = new SaleItemDto(itemList.get(i));
-//			try {
-//				sd.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(itemList.get(i).getItemIdx()).get(0).getImageUrl()));
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
+			try {
+				sd.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(itemList.get(i).getItemIdx()).get(0).getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 			for(int j=0; j<transList.size(); j++) {
 				if(itemList.get(i).getItemIdx() == transList.get(j).getItem().getItemIdx()) {
 					sd.setState(transList.get(j).getState());
