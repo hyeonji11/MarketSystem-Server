@@ -49,10 +49,10 @@ public class MypageService {
 		return itemToSearchItem(itemList);
 	}
 
-	public List<SearchItem> getSaleList(String userId) {
-		User user = userRepository.findById(userId).get();
+	public List<SearchItem> getSaleList(int userIdx) {
+		//User user = userRepository.findById(userIdx).get();
 
-		List<Item> itemList = itemRepository.findAllByUser_UserIdx(user.getUserIdx());
+		List<Item> itemList = itemRepository.findAllByUser_UserIdx(userIdx);
 
 		return itemToSearchItem(itemList);
 	}

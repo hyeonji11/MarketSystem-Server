@@ -98,7 +98,7 @@ public class MypageServiceTest {
 				.thenReturn(imageList);
 
 		//when
-		List<SearchItem> list = mypageService.getSaleList(userId);
+		List<SearchItem> list = mypageService.getSaleList(1);
 
 		//then
 		assertThat(list.get(0).title).isEqualTo(testItem.getTitle());

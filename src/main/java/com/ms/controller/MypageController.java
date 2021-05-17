@@ -35,8 +35,8 @@ public class MypageController {
 	}
 
 	@GetMapping("/sale")
-	public ResponseEntity<?> saleList(@RequestParam String userId) {
-		List<SearchItem> saleList = mypageService.getSaleList(userId);
+	public ResponseEntity<?> saleList(@RequestParam Integer userIdx) {
+		List<SearchItem> saleList = mypageService.getSaleList(userIdx);
 		return new ResponseEntity(saleList, HttpStatus.OK);
 	}
 
