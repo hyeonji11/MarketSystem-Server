@@ -33,15 +33,15 @@ public class EvaluateService {
 		evaluationRepository.save(eval);
 	}
 
-	public List<EvalResponseDto> getEvaluationList(String userId) {
-		User user = userRepository.findById(userId).get();
+	public List<EvalResponseDto> getEvaluationList(int userIdx) {
+		User user = userRepository.findById(userIdx).get();
 		List<EvalResponseDto> list = evaluationRepository.findAllByUserIdx(user.getUserIdx());
 		return list;
 	}
 
-	public double getEvalAverage(String userId) {
-		User user = userRepository.findById(userId).get();
-		double avg = evaluationRepository.getAverage(user.getUserIdx());
+	public double getEvalAverage(int userIdx) {
+		//User user = userRepository.findById(userIdx).get();
+		double avg = evaluationRepository.getAverage(userIdx);
 		return avg;
 	}
 

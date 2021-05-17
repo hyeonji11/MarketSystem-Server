@@ -27,10 +27,10 @@ public class EvaluateController {
 	}
 
 	@GetMapping("/list")
-	public ResponseEntity<EvalListResponseDto> evaluationList(@RequestParam String userId) {
+	public ResponseEntity<EvalListResponseDto> evaluationList(@RequestParam Integer userIdx) {
 		EvalListResponseDto res = new EvalListResponseDto();
-		res.setEvalList(evalService.getEvaluationList(userId));
-		res.setAverage(evalService.getEvalAverage(userId));
+		res.setEvalList(evalService.getEvaluationList(userIdx));
+		res.setAverage(evalService.getEvalAverage(userIdx));
 		return new ResponseEntity(res, HttpStatus.OK);
 	}
 }

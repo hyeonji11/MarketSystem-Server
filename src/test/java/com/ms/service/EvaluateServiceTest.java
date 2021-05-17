@@ -106,7 +106,7 @@ public class EvaluateServiceTest {
 				.thenReturn(list);
 
 		//when
-		List<EvalResponseDto> res = evaluateService.getEvaluationList(userId);
+		List<EvalResponseDto> res = evaluateService.getEvaluationList(userIdx);
 
 		//then
 		verify(userRepository).findById(userId);
@@ -130,7 +130,7 @@ public class EvaluateServiceTest {
 		.thenReturn(3.5);
 
 		//when
-		double avg = evaluateService.getEvalAverage(userId);
+		double avg = evaluateService.getEvalAverage(userIdx);
 
 		//then
 		verify(userRepository).findById(userId);
