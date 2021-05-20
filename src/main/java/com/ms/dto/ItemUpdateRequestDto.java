@@ -14,6 +14,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class ItemUpdateRequestDto {
+	int itemIdx;
 	String title;
 	String content;
 	String charge;
@@ -23,8 +24,9 @@ public class ItemUpdateRequestDto {
 	MultipartFile[] images;
 
 	@Builder
-	public ItemUpdateRequestDto(String title, String content, String charge,
+	public ItemUpdateRequestDto(int itemIdx, String title, String content, String charge,
 			boolean type, LocalDateTime registrationDate, LocalDate returnDate, MultipartFile[] images) {
+		this.itemIdx = itemIdx;
 		this.title = title;
 		this.content = content;
 		this.charge = charge;

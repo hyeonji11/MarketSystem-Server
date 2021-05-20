@@ -122,13 +122,12 @@ public class ItemController {
 
 	// update
 	@PutMapping()
-	public ResponseEntity<?> update(@RequestParam(value = "itemIdx") int itemIdx,
-			@ModelAttribute ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
-		itemService.update(itemIdx, itemUpdateRequestDto);
+	public ResponseEntity<?> update(@ModelAttribute ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
+		itemService.update(itemUpdateRequestDto);
 
 		if (itemUpdateRequestDto.getImages() != null) {
 			try {
-				itemService.uploadImages(Arrays.asList(itemUpdateRequestDto.getImages()), itemIdx);
+				itemService.uploadImages(Arrays.asList(itemUpdateRequestDto.getImages()), itemUpdateRequestDto.getItemIdx());
 			} catch (IOException e) {
 				return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 			}

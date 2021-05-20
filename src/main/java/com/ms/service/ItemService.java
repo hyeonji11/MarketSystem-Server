@@ -187,8 +187,8 @@ public class ItemService {
 		return itemRepository.findById(itemIdx);
 	}
 
-	public Integer update(int itemIdx, ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
-		Item item = itemRepository.findById(itemIdx).orElseThrow(() -> new IllegalArgumentException("해당 아이템 없음"));
+	public Integer update(ItemUpdateRequestDto itemUpdateRequestDto) throws IOException {
+		Item item = itemRepository.findById(itemUpdateRequestDto.getItemIdx()).orElseThrow(() -> new IllegalArgumentException("해당 아이템 없음"));
 
 		item.setTitle(itemUpdateRequestDto.getTitle());
 		item.setContent(itemUpdateRequestDto.getContent());
@@ -199,7 +199,7 @@ public class ItemService {
 
 		itemRepository.save(item);
 
-		return itemIdx;
+		return item.getItemIdx();
 	}
 
 	public Integer delete(int itemIdx) {
