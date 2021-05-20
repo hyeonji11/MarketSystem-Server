@@ -3,6 +3,7 @@ package com.ms.dto;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 import lombok.Builder;
@@ -19,8 +20,11 @@ public class ItemUpdateRequestDto {
 	String content;
 	String charge;
 	boolean type;
-	LocalDateTime registrationDate;
-	LocalDate returnDate;
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+	public LocalDateTime registrationDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
+	public LocalDate returnDate;
 	MultipartFile[] images;
 
 	@Builder
