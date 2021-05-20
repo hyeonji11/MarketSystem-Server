@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.Image;
 import com.ms.domain.Item;
+import com.ms.dto.ItemEditDto;
 import com.ms.dto.ItemSaveRequestDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.dto.TransactionRequestDto;
@@ -71,6 +72,28 @@ public class ItemController {
 		projectItem.setImageList(imageDirList);
 
 		return projectItem;
+	}
+
+	@GetMapping("/edit")
+	public ItemEditDto editInfo(@RequestParam(value="itemIdx") int itemIdx) {
+		Item item = itemService.findById(itemIdx).get();
+
+		ItemEditDto itemEditDto = new ItemEditDto(item);
+		List<Image> imageList = itemService.callImages(itemIdx);
+		List<byte[]> imageDirList = new ArrayList();
+		List<String> imageNameList = new ArrayList();
+		for(Image image: imageList) {
+			try {
+				imageDirList.add(itemService.getImage(image.getImageUrl()));
+				imageNameList.add(image.getImageOriName());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		itemEditDto.setImageList(imageDirList);
+		itemEditDto.setImageName(imageNameList);
+
+		return itemEditDto;
 	}
 
 	// search
