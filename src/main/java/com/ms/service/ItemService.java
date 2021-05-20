@@ -195,6 +195,8 @@ public class ItemService {
 		item.setRegistrationDate(itemUpdateRequestDto.getRegistrationDate());
 		if(itemUpdateRequestDto.isType()) {
 			item.setReturnDate(itemUpdateRequestDto.getReturnDate());
+		} else {
+			item.setReturnDate(null);
 		}
 
 		itemRepository.save(item);
