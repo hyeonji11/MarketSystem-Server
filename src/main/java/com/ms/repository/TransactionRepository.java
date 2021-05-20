@@ -13,4 +13,5 @@ public interface TransactionRepository extends JpaRepository<Transaction, Intege
 			+ " ORDER BY t.transactionIdx DESC")
 	List<Integer> findItemIdxByUserIdx(int userIdx);
 	List<Transaction> findByItem_ItemIdxIn(@Param(value="itemIdx") List<Integer> itemIdxList);
+	Transaction findByItem_ItemIdx(@Param(value="itemIdx") int itemIdx);
 }

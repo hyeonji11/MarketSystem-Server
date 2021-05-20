@@ -20,8 +20,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.Image;
 import com.ms.domain.Item;
+import com.ms.domain.Transaction;
 import com.ms.dto.ItemEditDto;
 import com.ms.dto.ItemSaveRequestDto;
+import com.ms.dto.ItemTransDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.dto.TransactionRequestDto;
 import com.ms.interfaces.ProjectItem;
@@ -143,10 +145,12 @@ public class ItemController {
 		return new ResponseEntity("삭제되었습니다.", HttpStatus.OK);
 	}
 
-	@GetMapping("/userId")
-	public ResponseEntity<?> getItemUserId(@RequestParam(value = "itemIdx") int itemIdx) {
+	@GetMapping("/info")
+	public ResponseEntity<?> getItemInfo(@RequestParam(value = "itemIdx") int itemIdx) {
 		Item item = itemService.findById(itemIdx).get();
-		return new ResponseEntity(item.getUser().getId(), HttpStatus.OK);
+		Transaction trans = transService.getTransaction(itemIdx);
+		ItemTransDto transDto = new ItemTransDto(itemIdx, item.getUser().getUserIdx(), item.getUser().getId(), trans.getState(), trans.getUser().getUserIdx());
+		return new ResponseEntity(transDto, HttpStatus.OK);
 	}
 
 	@PostMapping("/trans")

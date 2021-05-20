@@ -27,4 +27,8 @@ public class TransactionService {
 				.build();
 		transRepository.save(trans);
 	}
+
+	public Transaction getTransaction(int itemIdx) {
+		return transRepository.findByItem_ItemIdx(itemIdx);
+	}
 }
