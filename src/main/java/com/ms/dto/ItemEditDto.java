@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import com.ms.domain.Item;
 
 public class ItemEditDto {
@@ -12,7 +14,11 @@ public class ItemEditDto {
 	public String content;
 	public String charge;
 	public boolean type;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
 	public LocalDateTime registrationDate;
+
+	@DateTimeFormat(pattern = "yyyy-MM-dd")
 	public LocalDate returnDate;
 	public List<byte[]> imageList;
 	public List<String> imageName;
