@@ -8,8 +8,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -194,8 +192,10 @@ public class ItemService {
 		item.setContent(itemUpdateRequestDto.getContent());
 		item.setCharge(itemUpdateRequestDto.getCharge());
 		item.setType(itemUpdateRequestDto.isType());
-		item.setRegistrationDate(LocalDateTime.now());
-		item.setReturnDate(LocalDate.now().plusDays(7));
+		item.setRegistrationDate(itemUpdateRequestDto.getRegistrationDate());
+		if(itemUpdateRequestDto.isType()) {
+			item.setReturnDate(itemUpdateRequestDto.getReturnDate());
+		}
 
 		itemRepository.save(item);
 
