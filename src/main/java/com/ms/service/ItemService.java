@@ -157,6 +157,26 @@ public class ItemService {
 		if (itemList.isEmpty())
 			return null;
 
+		List<Integer> itemIdxList = new ArrayList();
+
+		for(Item item: itemList) {
+			itemIdxList.add(item.getItemIdx());
+		}
+
+		// 아이템 당 이미지 1개
+		List<Image> imageList = imageRepository.findAllByItem_ItemIdxIn(itemIdxList);
+		for(int i=0; i<itemList.size(); i++) {
+			Item item = itemList.get(i);
+			Image image = imageList.get(i);
+			SearchItem si = new SearchItem(item);
+			try {
+				si.setImage(getImage(image.getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			searchItemList.add(si);
+		}
+		/*
 		for (Item item : itemList) {
 			SearchItem searchItem = new SearchItem(item);
 			if (imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).size() != 0) {
@@ -172,6 +192,7 @@ public class ItemService {
 			searchItemList.add(searchItem);
 
 		}
+		*/
 
 		return searchItemList;
 
@@ -221,6 +242,26 @@ public class ItemService {
 		if (itemList.isEmpty())
 			return null;
 
+		List<Integer> itemIdxList = new ArrayList();
+
+		for(Item item: itemList) {
+			itemIdxList.add(item.getItemIdx());
+		}
+
+		List<Image> imageList = imageRepository.findAllByItem_ItemIdxIn(itemIdxList);
+		for(int i=0; i<itemList.size(); i++) {
+			Item item = itemList.get(i);
+			Image image = imageList.get(i);
+			SearchItem si = new SearchItem(item);
+			try {
+				si.setImage(getImage(image.getImageUrl()));
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			searchItemList.add(si);
+		}
+
+		/*
 		for (Item item : itemList) {
 			Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
 
@@ -234,6 +275,7 @@ public class ItemService {
 			searchItemList.add(searchItem);
 
 		}
+		*/
 
 		return searchItemList;
 	}

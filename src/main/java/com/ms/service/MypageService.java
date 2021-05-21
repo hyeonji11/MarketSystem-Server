@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ms.domain.Image;
 import com.ms.domain.Item;
 import com.ms.domain.Transaction;
 import com.ms.domain.User;
@@ -98,15 +99,34 @@ public class MypageService {
 	public List<SearchItem> itemToSearchItem(List<Item> itemList) {
 		List<SearchItem> siList = new ArrayList<>();
 
-		for(Item item : itemList) {
+		List<Integer> itemIdxList = new ArrayList();
+
+		for(Item item: itemList) {
+			itemIdxList.add(item.getItemIdx());
+		}
+
+		List<Image> imageList = imageRepository.findAllByItem_ItemIdxIn(itemIdxList);
+		for(int i=0; i<itemList.size(); i++) {
+			Item item = itemList.get(i);
+			Image image = imageList.get(i);
 			SearchItem si = new SearchItem(item);
 			try {
-				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
+				si.setImage(itemService.getImage(image.getImageUrl()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			siList.add(si);
 		}
+
+//		for(Item item : itemList) {
+//			SearchItem si = new SearchItem(item);
+//			try {
+//				si.setImage(itemService.getImage(imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0).getImageUrl()));
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			siList.add(si);
+//		}
 		// imageRepository 여러번 호출하는거 개선할 방법 찾기
 		// 쿼리에 in 써서 하는 방법 상각해보기
 
