@@ -122,8 +122,6 @@ public class ItemService {
 		}
 	}
 
-	//리스트용으로 메소드 하나 더만들기
-	//스트림 여러번 열었다 닫았다 하기 방지
 	public byte[] getImage(String fileDir) throws IOException {
 		FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -151,6 +149,37 @@ public class ItemService {
         return fileArray;
 	}
 
+	public List<byte[]> getImageList(List<Image> imageList) throws IOException {
+		StringBuffer fileDir;
+
+		FileInputStream fis = null;
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+        int readCount = 0;
+        byte[] buffer = new byte[1024];
+        byte[] fileArray = null;
+
+        List<byte[]> fileArrays = new ArrayList();
+
+		for(Image image: imageList) {
+			fileDir = new StringBuffer(image.getImageUrl());
+			try{
+	            fis = new FileInputStream(fileDir.toString());
+	            while((readCount = fis.read(buffer)) != -1){
+	                baos.write(buffer, 0, readCount);
+	            }
+	            fileArray = baos.toByteArray();
+	            fileArrays.add(fileArray);
+	        } catch(Exception e){
+	            e.printStackTrace();
+	        }
+		}
+
+		fis.close();
+        baos.close();
+        return fileArrays;
+	}
+
 	public List<SearchItem> findAll() {
 		List<Item> itemList = itemRepository.findAll();
 
@@ -167,15 +196,25 @@ public class ItemService {
 
 		// 아이템 당 이미지 1개
 		List<Image> imageList = imageRepository.findAllByItem_ItemIdxIn(itemIdxList);
+		List<byte[]> urlList = new ArrayList();
+		try {
+			urlList = getImageList(imageList);
+			//si.setImage(getImage(image.getImageUrl()));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		for(int i=0; i<itemList.size(); i++) {
 			Item item = itemList.get(i);
 			Image image = imageList.get(i);
 			SearchItem si = new SearchItem(item);
+			/*
 			try {
 				si.setImage(getImage(image.getImageUrl()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			*/
+			si.setImage(urlList.get(i));
 			searchItemList.add(si);
 		}
 		/*
