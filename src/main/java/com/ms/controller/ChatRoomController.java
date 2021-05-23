@@ -48,7 +48,13 @@ public class ChatRoomController {
 		List<ChatMessageResponseDto> chatList = chatService.getChatMessages(chatRoomIdx);
 		ChatRoom cr = chatService.getChatRoom(chatRoomIdx);
 		Transaction trans = transService.getTransaction(cr.getItem().getItemIdx());
-		ItemTransDto transDto = new ItemTransDto(cr.getItem().getItemIdx(), cr.getItem().getUser().getUserIdx(), cr.getItem().getUser().getId(), trans.getState(), trans.getUser().getUserIdx());
+		String state = "";
+		int traderIdx = -1;
+		if(trans != null) {
+			state = trans.getState();
+			traderIdx = trans.getUser().getUserIdx();
+		}
+		ItemTransDto transDto = new ItemTransDto(cr.getItem().getItemIdx(), cr.getItem().getUser().getUserIdx(), cr.getItem().getUser().getId(), state, traderIdx);
 
 		chatItemDto.setChatList(chatList);
 		chatItemDto.setTransDto(transDto);
