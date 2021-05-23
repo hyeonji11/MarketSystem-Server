@@ -155,13 +155,12 @@ public class ItemService {
 		FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        int readCount = 0;
-        byte[] buffer = new byte[1024];
-        byte[] fileArray = null;
-
         List<byte[]> fileArrays = new ArrayList();
 
 		for(Image image: imageList) {
+			int readCount = 0;
+	        byte[] buffer = new byte[1024];
+	        byte[] fileArray = null;
 			fileDir = new StringBuffer(image.getImageUrl());
 			try{
 	            fis = new FileInputStream(fileDir.toString());
