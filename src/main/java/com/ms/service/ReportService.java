@@ -1,9 +1,7 @@
 package com.ms.service;
 
 import java.util.List;
-import java.util.Optional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.ms.domain.Report;
@@ -24,10 +22,9 @@ public class ReportService {
 
 	public void saveReport(ReportRequestDto reportDto) {
 		User user = userRepository.findById(reportDto.getUserId()).get();
-		
+
 		Report report = Report.builder()
 				.user(user)
-				.title(reportDto.getTitle())
 				.content(reportDto.getContent())
 				.build();
 

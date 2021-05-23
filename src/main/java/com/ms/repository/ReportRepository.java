@@ -9,7 +9,7 @@ import com.ms.domain.Report;
 import com.ms.dto.ReportResponseDto;
 
 public interface ReportRepository extends JpaRepository<Report, Integer>{
-	@Query("SELECT new com.ms.dto.ReportResponseDto(e.title, e.content) "
+	@Query("SELECT new com.ms.dto.ReportResponseDto(e.content) "
 			+ "FROM Report e "
 			+ "WHERE e.user.userIdx = :userIdx")
 	List<ReportResponseDto> findAllByUserIdx(int userIdx);

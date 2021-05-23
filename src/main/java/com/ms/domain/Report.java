@@ -25,14 +25,12 @@ public class Report {
 	@JoinColumn(name = "userIdx")
 	User user;
 
-	String title;
 	String content;
 
 	@Builder
-	public Report(User user, String title, String content) {
+	public Report(User user, String content) {
 		this.user = user;
-		this.title = title;
 		this.content = content;
-	} 
+	}
 
 }
