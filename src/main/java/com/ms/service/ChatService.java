@@ -97,4 +97,8 @@ public class ChatService {
 
 		return chatMessageRepository.save(cm);
 	}
+
+	public ChatRoom getChatRoom(int chatRoomIdx) {
+		return chatRoomRepository.findById(chatRoomIdx).get();
+	}
 }

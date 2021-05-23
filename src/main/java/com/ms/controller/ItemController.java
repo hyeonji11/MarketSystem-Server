@@ -20,10 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.ms.domain.Image;
 import com.ms.domain.Item;
-import com.ms.domain.Transaction;
 import com.ms.dto.ItemEditDto;
 import com.ms.dto.ItemSaveRequestDto;
-import com.ms.dto.ItemTransDto;
 import com.ms.dto.ItemUpdateRequestDto;
 import com.ms.dto.TransactionRequestDto;
 import com.ms.interfaces.ProjectItem;
@@ -145,13 +143,13 @@ public class ItemController {
 		return new ResponseEntity("삭제되었습니다.", HttpStatus.OK);
 	}
 
-	@GetMapping("/info")
-	public ResponseEntity<?> getItemInfo(@RequestParam(value = "itemIdx") int itemIdx) {
-		Item item = itemService.findById(itemIdx).get();
-		Transaction trans = transService.getTransaction(itemIdx);
-		ItemTransDto transDto = new ItemTransDto(itemIdx, item.getUser().getUserIdx(), item.getUser().getId(), trans.getState(), trans.getUser().getUserIdx());
-		return new ResponseEntity(transDto, HttpStatus.OK);
-	}
+//	@GetMapping("/info")
+//	public ResponseEntity<?> getItemInfo(@RequestParam(value = "itemIdx") int itemIdx) {
+//		Item item = itemService.findById(itemIdx).get();
+//		Transaction trans = transService.getTransaction(itemIdx);
+//		ItemTransDto transDto = new ItemTransDto(itemIdx, item.getUser().getUserIdx(), item.getUser().getId(), trans.getState(), trans.getUser().getUserIdx());
+//		return new ResponseEntity(transDto, HttpStatus.OK);
+//	}
 
 	@PostMapping("/trans")
 	public ResponseEntity<?> transactionComplete(@RequestBody TransactionRequestDto dto) {

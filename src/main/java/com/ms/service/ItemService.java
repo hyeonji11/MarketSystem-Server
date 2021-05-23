@@ -122,6 +122,8 @@ public class ItemService {
 		}
 	}
 
+	//리스트용으로 메소드 하나 더만들기
+	//스트림 여러번 열었다 닫았다 하기 방지
 	public byte[] getImage(String fileDir) throws IOException {
 		FileInputStream fis = null;
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
