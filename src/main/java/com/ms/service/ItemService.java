@@ -195,6 +195,7 @@ public class ItemService {
 
 		// 아이템 당 이미지 1개
 		List<Image> imageList = imageRepository.findAllByItem_ItemIdxIn(itemIdxList);
+		/*
 		List<byte[]> urlList = new ArrayList();
 		try {
 			urlList = getImageList(imageList);
@@ -202,37 +203,19 @@ public class ItemService {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		*/
 		for(int i=0; i<itemList.size(); i++) {
 			Item item = itemList.get(i);
 			Image image = imageList.get(i);
 			SearchItem si = new SearchItem(item);
-			/*
 			try {
 				si.setImage(getImage(image.getImageUrl()));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-			*/
-			si.setImage(urlList.get(i));
+			//si.setImage(urlList.get(i));
 			searchItemList.add(si);
 		}
-		/*
-		for (Item item : itemList) {
-			SearchItem searchItem = new SearchItem(item);
-			if (imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).size() != 0) {
-				Image image = imageRepository.findAllByItem_ItemIdx(item.getItemIdx()).get(0);
-				//searchItem.setImage(image);
-				try {
-					searchItem.setImage(getImage(image.getImageUrl()));
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			}
-
-			searchItemList.add(searchItem);
-
-		}
-		*/
 
 		return searchItemList;
 
